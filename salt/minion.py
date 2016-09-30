@@ -3734,7 +3734,7 @@ class ProxyMinion(Minion):
             self.schedule.delete_job('__proxy_keepalive', persist=True)
 
         #  Sync the grains here so the proxy can communicate them to the master
-        self.functions['saltutil.sync_grains'](saltenv='base')
+        self.functions['saltutil.sync_grains'](saltenv=self.opts['environment'])
         self.grains_cache = self.opts['grains']
         self.ready = True
 
