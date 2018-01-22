@@ -6,6 +6,7 @@
 
 # Import Python libs
 from __future__ import absolute_import
+import unittest
 import os
 import re
 import logging
@@ -27,6 +28,7 @@ class DocTestCase(TestCase):
     Unit test case for testing doc files and strings.
     '''
 
+    @unittest.skip('Finds false positives (e.g. release notes mentioning removing :doc:).')
     def test_check_for_doc_inline_markup(self):
         '''
         We should not be using the ``:doc:`` inline markup option when
