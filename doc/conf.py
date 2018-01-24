@@ -243,7 +243,9 @@ formulas_dir = os.path.join(os.pardir, docs_basepath, 'formulas')
 
 # ----- Intersphinx Settings ------------------------------------------------>
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None)
+    'python':
+        ('http://docs.python.org/{}'.format(sys.version_info[0]),
+         '/usr/share/doc/python{}.{}/html/objects.inv'.format(sys.version_info[0], sys.version_info[1]))
 }
 # <---- Intersphinx Settings -------------------------------------------------
 
