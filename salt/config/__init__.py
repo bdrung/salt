@@ -76,6 +76,8 @@ else:
     _DFLT_FQDNS_GRAINS = True
     _MASTER_TRIES = 1
     _MASTER_USER = salt.utils.user.get_user()
+    if _MASTER_USER == 'root':
+        _MASTER_USER = 'salt'
 
 
 def _gather_buffer_space():
