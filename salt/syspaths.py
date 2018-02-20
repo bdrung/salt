@@ -33,7 +33,7 @@ except ImportError:
     import types
     __generated_syspaths = types.ModuleType(str('salt._syspaths'))  # future lint: blacklisted-function
     for key in ('ROOT_DIR', 'CONFIG_DIR', 'CACHE_DIR', 'SOCK_DIR',
-                'SRV_ROOT_DIR', 'BASE_FILE_ROOTS_DIR', 'HOME_DIR',
+                'SRV_ROOT_DIR', 'STATE_DIR', 'BASE_FILE_ROOTS_DIR', 'HOME_DIR',
                 'BASE_PILLAR_ROOTS_DIR', 'BASE_THORIUM_ROOTS_DIR',
                 'BASE_MASTER_ROOTS_DIR', 'LOGS_DIR', 'PIDFILE_DIR',
                 'SPM_PARENT_PATH', 'SPM_FORMULA_PATH',
@@ -99,6 +99,10 @@ if SOCK_DIR is None:
 SRV_ROOT_DIR = __generated_syspaths.SRV_ROOT_DIR
 if SRV_ROOT_DIR is None:
     SRV_ROOT_DIR = os.path.join(ROOT_DIR, 'srv')
+
+STATE_DIR = __generated_syspaths.STATE_DIR
+if STATE_DIR is None:
+    STATE_DIR = CONFIG_DIR
 
 BASE_FILE_ROOTS_DIR = __generated_syspaths.BASE_FILE_ROOTS_DIR
 if BASE_FILE_ROOTS_DIR is None:
