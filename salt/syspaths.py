@@ -42,6 +42,7 @@ EXPECTED_VARIABLES = (
     "SPM_PILLAR_PATH",
     "SPM_REACTOR_PATH",
     "SHARE_DIR",
+    "STATE_DIR",
 )
 
 try:
@@ -132,6 +133,10 @@ if SOCK_DIR is None:
 SRV_ROOT_DIR = __generated_syspaths.SRV_ROOT_DIR
 if SRV_ROOT_DIR is None:
     SRV_ROOT_DIR = os.path.join(ROOT_DIR, "srv")
+
+STATE_DIR = __generated_syspaths.STATE_DIR
+if STATE_DIR is None:
+    STATE_DIR = CONFIG_DIR
 
 BASE_FILE_ROOTS_DIR = __generated_syspaths.BASE_FILE_ROOTS_DIR
 if BASE_FILE_ROOTS_DIR is None:
