@@ -5,12 +5,12 @@
     tests.support.mock
     ~~~~~~~~~~~~~~~~~~
 
-    Helper module that wraps `mock` and provides some fake objects in order to
-    properly set the function/class decorators and yet skip the test case's
-    execution.
+    Helper module that wraps :mod:`mock <python3:unittest.mock>` or `mock` and
+    provides some fake objects in order to properly set the function/class
+    decorators and yet skip the test case's execution.
 
-    Note: mock >= 2.0.0 required since unittest.mock does not have
-    MagicMock.assert_called in Python < 3.6.
+    Note: mock >= 2.0.0 is required for Python < 3.6 since unittest.mock in
+    older Python versions does not have MagicMock.assert_called.
 """
 # pylint: disable=unused-import,function-redefined,blacklisted-module,blacklisted-external-module
 
@@ -45,6 +45,11 @@ from mock import (
 
 # Import salt libs
 from salt.ext import six
+
+if sys.version_info >= (3, 6):
+    import unittest.mock
+
+    sys.modules["mock"] = unittest.mock
 
 # pylint: disable=no-name-in-module,no-member
 
