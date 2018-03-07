@@ -19,7 +19,6 @@ from salt.utils.versions import LooseVersion
 # Import Salt Testing Libs
 from tests.support.mixins import LoaderModuleMockMixin
 from tests.support.mock import MagicMock
-from tests.support.mock import __version__ as mock_version
 from tests.support.mock import patch
 from tests.support.unit import TestCase
 
@@ -145,8 +144,7 @@ class GCETestCase(TestCase, LoaderModuleMockMixin):
         with patch("salt.config.check_driver_dependencies", return_value=True) as p:
             get_deps = gce.get_dependencies()
             self.assertEqual(get_deps, True)
-            if LooseVersion(mock_version) >= LooseVersion("2.0.0"):
-                self.assert_called_once(p)
+            self.assert_called_once(p)
 
     def test_provider_matches(self):
         """
