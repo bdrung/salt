@@ -4,12 +4,12 @@
     tests.support.mock
     ~~~~~~~~~~~~~~~~~~
 
-    Helper module that wraps `mock` and provides some fake objects in order to
-    properly set the function/class decorators and yet skip the test case's
-    execution.
+    Helper module that wraps :mod:`mock <python3:unittest.mock>` or `mock` and
+    provides some fake objects in order to properly set the function/class
+    decorators and yet skip the test case's execution.
 
-    Note: mock >= 2.0.0 required since unittest.mock does not have
-    MagicMock.assert_called in Python < 3.6.
+    Note: mock >= 2.0.0 is required for Python < 3.6 since unittest.mock in
+    older Python versions does not have MagicMock.assert_called.
 """
 # pylint: disable=unused-import,function-redefined,blacklisted-module,blacklisted-external-module
 
@@ -20,6 +20,12 @@ import errno
 import fnmatch
 import sys
 
+if sys.version_info >= (3, 6):  # noqa
+    import unittest.mock
+
+    sys.modules["mock"] = unittest.mock  # noqa
+
+# isort:imports-thirdparty
 # By these days, we should blowup if mock is not available
 import mock  # pylint: disable=blacklisted-external-import
 import salt.utils.stringutils
@@ -34,7 +40,6 @@ from mock import (
     NonCallableMagicMock,
     NonCallableMock,
     PropertyMock,
-    __version__,
     call,
     create_autospec,
     patch,
@@ -44,10 +49,12 @@ from mock import (
 # pylint: disable=no-name-in-module,no-member
 
 
-__mock_version = tuple(
-    [int(part) for part in mock.__version__.split(".") if part.isdigit()]
+__mock_version = (
+    tuple([int(part) for part in mock.__version__.split(".") if part.isdigit()])
+    if hasattr(mock, "__version__")
+    else None
 )  # pylint: disable=no-member
-if sys.version_info < (3, 6) and __mock_version < (2,):
+if sys.version_info < (3, 6) and (__mock_version is None or __mock_version < (2,)):
     # We need mock >= 2.0.0 before Py3.6
     raise ImportError("Please install mock>=2.0.0")
 

@@ -12,7 +12,6 @@ from salt.cloud.clouds import gce
 from salt.exceptions import SaltCloudSystemExit
 from salt.utils.versions import LooseVersion
 from tests.support.mock import MagicMock
-from tests.support.mock import __version__ as mock_version
 from tests.support.mock import patch
 
 VM_NAME = "kings_landing"
@@ -137,8 +136,7 @@ def test_import():
     with patch("salt.config.check_driver_dependencies", return_value=True) as p:
         get_deps = gce.get_dependencies()
         assert get_deps is True
-        if LooseVersion(mock_version) >= LooseVersion("2.0.0"):
-            p.assert_called_once()
+        p.assert_called_once()
 
 
 def test_provider_matches():
