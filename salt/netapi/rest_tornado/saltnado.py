@@ -200,7 +200,7 @@ import tornado.escape
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
-import tornado.gen
+import tornado.gen as tornado_gen
 from tornado.concurrent import Future
 # pylint: enable=import-error
 
@@ -889,7 +889,7 @@ class SaltAPIHandler(BaseSaltAPIHandler):  # pylint: disable=W0223
 
         self.disbatch()
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def disbatch(self):
         '''
         Disbatch all lowstates to the appropriate clients
@@ -925,7 +925,7 @@ class SaltAPIHandler(BaseSaltAPIHandler):  # pylint: disable=W0223
         self.write(self.serialize({'return': ret}))
         self.finish()
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def _disbatch_local(self, chunk):
         '''
         Dispatch local client commands
@@ -951,7 +951,7 @@ class SaltAPIHandler(BaseSaltAPIHandler):  # pylint: disable=W0223
                     future.set_result(None)
                 except Exception:
                     pass
-            raise tornado.gen.Return('No minions matched the target. No command was sent, no jid was assigned.')
+            raise tornado_gen.Return('No minions matched the target. No command was sent, no jid was assigned.')
 
         # Map of minion_id -> returned for all minions we think we need to wait on
         minions = {m: False for m in pub_data['minions']}
@@ -963,10 +963,10 @@ class SaltAPIHandler(BaseSaltAPIHandler):  # pylint: disable=W0223
 
         # wait syndic a while to avoid missing published events
         if self.application.opts['order_masters']:
-            min_wait_time = tornado.gen.sleep(self.application.opts['syndic_wait'])
+            min_wait_time = tornado_gen.sleep(self.application.opts['syndic_wait'])
 
         # To ensure job_not_running and all_return are terminated by each other, communicate using a future
-        is_finished = tornado.gen.sleep(self.application.opts['gather_job_timeout'])
+        is_finished = tornado_gen.sleep(self.application.opts['gather_job_timeout'])
 
         # ping until the job is not running, while doing so, if we see new minions returning
         # that they are running the job, add them to the list
@@ -1000,11 +1000,11 @@ class SaltAPIHandler(BaseSaltAPIHandler):  # pylint: disable=W0223
                 # When finished entire routine, cleanup other futures and return result
                 if f is is_finished:
                     cancel_inflight_futures()
-                    raise tornado.gen.Return(chunk_ret)
+                    raise tornado_gen.Return(chunk_ret)
                 elif f is min_wait_time:
                     if not more_todo():
                         cancel_inflight_futures()
-                        raise tornado.gen.Return(chunk_ret)
+                        raise tornado_gen.Return(chunk_ret)
                     continue
                 f_result = f.result()
                 # if this is a start, then we need to add it to the pile
@@ -1020,7 +1020,7 @@ class SaltAPIHandler(BaseSaltAPIHandler):  # pylint: disable=W0223
                     # if there are no more minions to wait for, then we are done
                     if not more_todo() and min_wait_time.done():
                         cancel_inflight_futures()
-                        raise tornado.gen.Return(chunk_ret)
+                        raise tornado_gen.Return(chunk_ret)
 
             except TimeoutException:
                 pass
@@ -1030,7 +1030,7 @@ class SaltAPIHandler(BaseSaltAPIHandler):  # pylint: disable=W0223
             else:
                 events[1] = self.application.event_listener.get_event(self, tag='syndic/job/'+chunk['jid'])
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def job_not_running(self, jid, tgt, tgt_type, minions, is_finished):
         '''
         Return a future which will complete once jid (passed in) is no longer
@@ -1053,11 +1053,11 @@ class SaltAPIHandler(BaseSaltAPIHandler):  # pylint: disable=W0223
                 if f is is_finished:
                     if not event.done():
                         event.set_result(None)
-                    raise tornado.gen.Return(True)
+                    raise tornado_gen.Return(True)
                 event = f.result()
             except TimeoutException:
                 if not minion_running:
-                    raise tornado.gen.Return(True)
+                    raise tornado_gen.Return(True)
                 else:
                     ping_pub_data = yield self.saltclients['local'](tgt,
                                                                     'saltutil.find_job',
@@ -1074,7 +1074,7 @@ class SaltAPIHandler(BaseSaltAPIHandler):  # pylint: disable=W0223
                 minions[event['data']['id']] = False
             minion_running = True
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def _disbatch_local_async(self, chunk):
         '''
         Disbatch local client_async commands
@@ -1083,9 +1083,9 @@ class SaltAPIHandler(BaseSaltAPIHandler):  # pylint: disable=W0223
         # fire a job off
         pub_data = yield self.saltclients['local_async'](*f_call.get('args', ()), **f_call.get('kwargs', {}))
 
-        raise tornado.gen.Return(pub_data)
+        raise tornado_gen.Return(pub_data)
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def _disbatch_runner(self, chunk):
         '''
         Disbatch runner client commands
@@ -1096,20 +1096,20 @@ class SaltAPIHandler(BaseSaltAPIHandler):  # pylint: disable=W0223
             event = yield self.application.event_listener.get_event(self, tag=tag)
 
             # only return the return data
-            raise tornado.gen.Return(event['data']['return'])
+            raise tornado_gen.Return(event['data']['return'])
         except TimeoutException:
-            raise tornado.gen.Return('Timeout waiting for runner to execute')
+            raise tornado_gen.Return('Timeout waiting for runner to execute')
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def _disbatch_runner_async(self, chunk):
         '''
         Disbatch runner client_async commands
         '''
         pub_data = self.saltclients['runner'](chunk)
-        raise tornado.gen.Return(pub_data)
+        raise tornado_gen.Return(pub_data)
 
     # salt.utils.args.format_call doesn't work for functions having the
-    # annotation tornado.gen.coroutine
+    # annotation tornado_gen.coroutine
     def _format_call_run_job_async(self, chunk):
         f_call = salt.utils.args.format_call(
             salt.client.LocalClient.run_job,
@@ -1429,7 +1429,7 @@ class EventsSaltAPIHandler(SaltAPIHandler):  # pylint: disable=W0223
 
     .. seealso:: :ref:`events`
     '''
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def get(self):
         r'''
         An HTTP stream of the Salt master event bus
