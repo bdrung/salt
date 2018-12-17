@@ -15,7 +15,7 @@ import msgpack
 
 # Import Tornado libs
 import tornado
-import tornado.gen
+import tornado.gen as tornado_gen
 import tornado.netutil
 import tornado.concurrent
 from tornado.locks import Semaphore
@@ -137,7 +137,7 @@ class IPCServer(object):
             )
         self._started = True
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def handle_stream(self, stream):
         '''
         Override this to handle the streams as they arrive
@@ -147,13 +147,13 @@ class IPCServer(object):
         See https://tornado.readthedocs.io/en/latest/iostream.html#tornado.iostream.IOStream
         for additional details.
         '''
-        @tornado.gen.coroutine
+        @tornado_gen.coroutine
         def _null(msg):
-            raise tornado.gen.Return(None)
+            raise tornado_gen.Return(None)
 
         def write_callback(stream, header):
             if header.get('mid'):
-                @tornado.gen.coroutine
+                @tornado_gen.coroutine
                 def return_message(msg):
                     pack = salt.transport.frame.frame_msg_ipc(
                         msg,
@@ -308,7 +308,7 @@ class IPCClient(object):
 
         return future
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def _connect(self, timeout=None):
         '''
         Connect to a running IPCServer
@@ -350,7 +350,7 @@ class IPCClient(object):
                     self._connecting_future.set_exception(e)
                     break
 
-                yield tornado.gen.sleep(1)
+                yield tornado_gen.sleep(1)
 
     def __del__(self):
         self.close()
@@ -410,7 +410,7 @@ class IPCMessageClient(IPCClient):
     '''
     # FIXME timeout unimplemented
     # FIXME tries unimplemented
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def send(self, msg, timeout=None, tries=None):
         '''
         Send a message to an IPC socket
@@ -517,7 +517,7 @@ class IPCMessagePublisher(object):
             )
         self._started = True
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def _write(self, stream, pack):
         try:
             yield stream.write(pack)
@@ -624,7 +624,7 @@ class IPCMessageSubscriber(IPCClient):
         self.saved_data = []
         self._sync_read_in_progress = Semaphore()
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def _read_sync(self, timeout):
         yield self._sync_read_in_progress.acquire()
         exc_to_raise = None
@@ -681,7 +681,7 @@ class IPCMessageSubscriber(IPCClient):
         if exc_to_raise is not None:
             raise exc_to_raise  # pylint: disable=E0702
         self._sync_read_in_progress.release()
-        raise tornado.gen.Return(ret)
+        raise tornado_gen.Return(ret)
 
     def read_sync(self, timeout=None):
         '''
@@ -705,7 +705,7 @@ class IPCMessageSubscriber(IPCClient):
         self._read_sync_future = None
         return ret_future.result()
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def _read_async(self, callback):
         while not self.stream.closed():
             try:
@@ -722,7 +722,7 @@ class IPCMessageSubscriber(IPCClient):
             except Exception as exc:
                 log.error('Exception occurred while Subscriber handling stream: %s', exc)
 
-    @tornado.gen.coroutine
+    @tornado_gen.coroutine
     def read_async(self, callback):
         '''
         Asynchronously read messages and invoke a callback when they are ready.
@@ -734,10 +734,10 @@ class IPCMessageSubscriber(IPCClient):
                 yield self.connect(timeout=5)
             except tornado.iostream.StreamClosedError:
                 log.trace('Subscriber closed stream on IPC %s before connect', self.socket_path)
-                yield tornado.gen.sleep(1)
+                yield tornado_gen.sleep(1)
             except Exception as exc:
                 log.error('Exception occurred while Subscriber connecting: %s', exc)
-                yield tornado.gen.sleep(1)
+                yield tornado_gen.sleep(1)
         yield self._read_async(callback)
 
     def close(self):
