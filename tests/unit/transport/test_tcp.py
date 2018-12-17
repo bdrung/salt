@@ -8,8 +8,8 @@ from __future__ import absolute_import, print_function, unicode_literals
 import threading
 
 import tornado.gen as tornado_gen
-import tornado.ioloop
-import tornado.concurrent
+from tornado.ioloop import IOLoop, TimeoutError as TornadoTimeoutError
+from tornado.concurrent import Future as TornadoFuture
 from tornado.testing import AsyncTestCase, gen_test
 
 import salt.config
@@ -69,7 +69,7 @@ class BaseTCPReqCase(TestCase, AdaptedConfigurationTestCaseMixin):
         cls.server_channel = salt.transport.server.ReqServerChannel.factory(cls.master_config)
         cls.server_channel.pre_fork(cls.process_manager)
 
-        cls.io_loop = tornado.ioloop.IOLoop()
+        cls.io_loop = IOLoop()
 
         def run_loop_in_thread(loop):
             loop.make_current()
@@ -192,7 +192,7 @@ class BaseTCPPubCase(AsyncTestCase, AdaptedConfigurationTestCaseMixin):
         cls.req_server_channel = salt.transport.server.ReqServerChannel.factory(cls.master_config)
         cls.req_server_channel.pre_fork(cls.process_manager)
 
-        cls._server_io_loop = tornado.ioloop.IOLoop()
+        cls._server_io_loop = IOLoop()
         cls.req_server_channel.post_fork(cls._handle_payload, io_loop=cls._server_io_loop)
 
         def run_loop_in_thread(loop):
@@ -291,7 +291,7 @@ class SaltMessageClientPoolTest(AsyncTestCase):
             yield self.message_client_pool.connect()
 
         for message_client_mock in self.message_client_pool.message_clients:
-            future = tornado.concurrent.Future()
+            future = TornadoFuture()
             future.set_result('foo')
             message_client_mock.connect.return_value = future
 
@@ -303,10 +303,10 @@ class SaltMessageClientPoolTest(AsyncTestCase):
             yield self.message_client_pool.connect()
 
         for idx, message_client_mock in enumerate(self.message_client_pool.message_clients):
-            future = tornado.concurrent.Future()
+            future = TornadoFuture()
             if idx % 2 == 0:
                 future.set_result('foo')
             message_client_mock.connect.return_value = future
 
-        with self.assertRaises(tornado.ioloop.TimeoutError):
+        with self.assertRaises(TornadoTimeoutError):
             test_connect(self)

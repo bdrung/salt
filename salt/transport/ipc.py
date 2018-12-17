@@ -16,11 +16,11 @@ import msgpack
 # Import Tornado libs
 import tornado
 import tornado.gen as tornado_gen
-import tornado.netutil
-import tornado.concurrent
+from tornado.netutil import add_accept_handler, bind_unix_socket
+from tornado.concurrent import Future as TornadoFuture
 from tornado.locks import Semaphore
 from tornado.ioloop import IOLoop, TimeoutError as TornadoTimeoutError
-from tornado.iostream import IOStream
+from tornado.iostream import IOStream, StreamClosedError
 # Import Salt libs
 import salt.transport.client
 import salt.transport.frame
@@ -38,7 +38,7 @@ def future_with_timeout_callback(future):
         future._future_with_timeout._done_callback(future)
 
 
-class FutureWithTimeout(tornado.concurrent.Future):
+class FutureWithTimeout(TornadoFuture):
     def __init__(self, io_loop, future, timeout):
         super(FutureWithTimeout, self).__init__()
         self.io_loop = io_loop
@@ -128,10 +128,10 @@ class IPCServer(object):
             # Based on default used in tornado.netutil.bind_sockets()
             self.sock.listen(128)
         else:
-            self.sock = tornado.netutil.bind_unix_socket(self.socket_path)
+            self.sock = bind_unix_socket(self.socket_path)
 
         with salt.utils.asynchronous.current_ioloop(self.io_loop):
-            tornado.netutil.add_accept_handler(
+            add_accept_handler(
                 self.sock,
                 self.handle_connection,
             )
@@ -176,7 +176,7 @@ class IPCServer(object):
                 for framed_msg in unpacker:
                     body = framed_msg['body']
                     self.io_loop.spawn_callback(self.payload_handler, body, write_callback(stream, framed_msg['head']))
-            except tornado.iostream.StreamClosedError:
+            except StreamClosedError:
                 log.trace('Client disconnected from IPC %s', self.socket_path)
                 break
             except socket.error as exc:
@@ -241,7 +241,7 @@ class IPCClient(object):
     instance_map = weakref.WeakKeyDictionary()
 
     def __new__(cls, socket_path, io_loop=None):
-        io_loop = io_loop or tornado.ioloop.IOLoop.current()
+        io_loop = io_loop or IOLoop.current()
         if io_loop not in IPCClient.instance_map:
             IPCClient.instance_map[io_loop] = weakref.WeakValueDictionary()
         loop_instance_map = IPCClient.instance_map[io_loop]
@@ -269,7 +269,7 @@ class IPCClient(object):
         to the server.
 
         '''
-        self.io_loop = io_loop or tornado.ioloop.IOLoop.current()
+        self.io_loop = io_loop or IOLoop.current()
         self.socket_path = socket_path
         self._closing = False
         self.stream = None
@@ -296,7 +296,7 @@ class IPCClient(object):
             if hasattr(self, '_connecting_future'):
                 # read previous future result to prevent the "unhandled future exception" error
                 self._connecting_future.exception()  # pylint: disable=E0203
-            future = tornado.concurrent.Future()
+            future = TornadoFuture()
             self._connecting_future = future
             self._connect(timeout=timeout)
 
@@ -508,10 +508,10 @@ class IPCMessagePublisher(object):
             # Based on default used in tornado.netutil.bind_sockets()
             self.sock.listen(128)
         else:
-            self.sock = tornado.netutil.bind_unix_socket(self.socket_path)
+            self.sock = bind_unix_socket(self.socket_path)
 
         with salt.utils.asynchronous.current_ioloop(self.io_loop):
-            tornado.netutil.add_accept_handler(
+            add_accept_handler(
                 self.sock,
                 self.handle_connection,
             )
@@ -521,7 +521,7 @@ class IPCMessagePublisher(object):
     def _write(self, stream, pack):
         try:
             yield stream.write(pack)
-        except tornado.iostream.StreamClosedError:
+        except StreamClosedError:
             log.trace('Client disconnected from IPC %s', self.socket_path)
             self.streams.discard(stream)
         except Exception as exc:
@@ -664,7 +664,7 @@ class IPCMessageSubscriber(IPCClient):
             # In the timeout case, just return None.
             # Keep 'self._read_stream_future' alive.
             ret = None
-        except tornado.iostream.StreamClosedError as exc:
+        except StreamClosedError as exc:
             log.trace('Subscriber disconnected from IPC %s', self.socket_path)
             self._read_stream_future = None
             exc_to_raise = exc
@@ -716,7 +716,7 @@ class IPCMessageSubscriber(IPCClient):
                 for framed_msg in self.unpacker:
                     body = framed_msg['body']
                     self.io_loop.spawn_callback(callback, body)
-            except tornado.iostream.StreamClosedError:
+            except StreamClosedError:
                 log.trace('Subscriber disconnected from IPC %s', self.socket_path)
                 break
             except Exception as exc:
@@ -732,7 +732,7 @@ class IPCMessageSubscriber(IPCClient):
         while not self.connected():
             try:
                 yield self.connect(timeout=5)
-            except tornado.iostream.StreamClosedError:
+            except StreamClosedError:
                 log.trace('Subscriber closed stream on IPC %s before connect', self.socket_path)
                 yield tornado_gen.sleep(1)
             except Exception as exc:
