@@ -14,12 +14,20 @@ import time
 import msgpack
 
 # Import Tornado libs
-import tornado.gen as tornado_gen
-from tornado.concurrent import Future as TornadoFuture
-from tornado.locks import Lock
-from tornado.netutil import add_accept_handler, bind_unix_socket
-from tornado.ioloop import IOLoop, TimeoutError as TornadoTimeoutError
-from tornado.iostream import IOStream, StreamClosedError
+try:
+    import tornado4.gen as tornado_gen
+    from tornado4.concurrent import Future as TornadoFuture
+    from tornado4.locks import Lock
+    from tornado4.netutil import add_accept_handler, bind_unix_socket
+    from tornado4.ioloop import IOLoop, TimeoutError as TornadoTimeoutError
+    from tornado4.iostream import IOStream, StreamClosedError
+except ImportError:
+    import tornado.gen as tornado_gen
+    from tornado.concurrent import Future as TornadoFuture
+    from tornado.locks import Lock
+    from tornado.netutil import add_accept_handler, bind_unix_socket
+    from tornado.ioloop import IOLoop, TimeoutError as TornadoTimeoutError
+    from tornado.iostream import IOStream, StreamClosedError
 # Import Salt libs
 import salt.transport.client
 import salt.transport.frame

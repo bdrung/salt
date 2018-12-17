@@ -28,7 +28,12 @@ from salt.ext.six.moves import range
 from salt.utils.zeromq import zmq, ZMQDefaultLoop, install_zmq, ZMQ_VERSION_INFO
 # pylint: enable=import-error,no-name-in-module,redefined-builtin
 
-import tornado.gen as tornado_gen  # pylint: disable=F0401
+try:
+    import tornado4.gen as tornado_gen  # pylint: disable=F0401
+    from tornado4.stack_context import StackContext
+except ImportError:
+    import tornado.gen as tornado_gen  # pylint: disable=F0401
+    from tornado.stack_context import StackContext
 
 # Import salt libs
 import salt.crypt
@@ -91,7 +96,6 @@ try:
 except ImportError:
     HAS_HALITE = False
 
-from tornado.stack_context import StackContext
 from salt.utils.ctx import RequestContext
 
 

@@ -38,9 +38,6 @@ from salt.exceptions import SaltReqTimeoutError, SaltException
 from salt._compat import ipaddress
 
 from salt.utils.zeromq import zmq, ZMQDefaultLoop, install_zmq, ZMQ_VERSION_INFO, LIBZMQ_VERSION_INFO
-import zmq.error
-import zmq.eventloop.ioloop
-import zmq.eventloop.zmqstream
 
 try:
     import zmq.utils.monitor
@@ -49,9 +46,20 @@ except ImportError:
     HAS_ZMQ_MONITOR = False
 
 # Import Tornado Libs
-import tornado
-import tornado.gen as tornado_gen
-from tornado.concurrent import Future as TornadoFuture
+try:
+    import tornado4
+    import tornado4.gen as tornado_gen
+    from tornado4.concurrent import Future as TornadoFuture
+    # Expose tornado4 as tornado for zmq.eventloop.ioloop
+    sys.modules['tornado'] = tornado4
+except ImportError:
+    import tornado
+    import tornado.gen as tornado_gen
+    from tornado.concurrent import Future as TornadoFuture
+
+import zmq.error
+import zmq.eventloop.ioloop
+import zmq.eventloop.zmqstream
 
 # Import third party libs
 try:

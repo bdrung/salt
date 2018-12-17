@@ -38,15 +38,26 @@ from salt.exceptions import SaltReqTimeoutError, SaltClientError
 from salt.transport import iter_transport_opts
 
 # Import Tornado Libs
-from tornado import version_info as tornado_version_info
-from tornado.tcpserver import TCPServer
-import tornado.gen as tornado_gen
-from tornado.concurrent import Future as TornadoFuture
-from tornado.ioloop import IOLoop
-from tornado.iostream import IOStream, StreamClosedError
-from tornado.tcpclient import TCPClient
-import tornado.netutil
-import tornado.iostream
+try:
+    from tornado4 import version_info as tornado_version_info
+    from tornado4.tcpserver import TCPServer
+    import tornado4.gen as tornado_gen
+    from tornado4.concurrent import Future as TornadoFuture
+    from tornado4.ioloop import IOLoop
+    from tornado4.iostream import IOStream, StreamClosedError
+    from tornado4.tcpclient import TCPClient
+    import tornado4.netutil
+    import tornado4.iostream
+except ImportError:
+    from tornado import version_info as tornado_version_info
+    from tornado.tcpserver import TCPServer
+    import tornado.gen as tornado_gen
+    from tornado.concurrent import Future as TornadoFuture
+    from tornado.ioloop import IOLoop
+    from tornado.iostream import IOStream, StreamClosedError
+    from tornado.tcpclient import TCPClient
+    import tornado.netutil
+    import tornado.iostream
 
 # pylint: disable=import-error,no-name-in-module
 if six.PY2:
@@ -75,7 +86,10 @@ else:
 if USE_LOAD_BALANCER:
     import threading
     import multiprocessing
-    from tornado.util import errno_from_exception
+    try:
+        from tornado4.util import errno_from_exception
+    except ImportError:
+        from tornado.util import errno_from_exception
     from salt.utils.process import SignalHandlingMultiprocessingProcess
 
 log = logging.getLogger(__name__)

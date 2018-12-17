@@ -12,7 +12,10 @@ import os
 import string
 import shutil
 import ftplib
-from tornado.httputil import parse_response_start_line, HTTPHeaders, HTTPInputError
+try:
+    from tornado4.httputil import parse_response_start_line, HTTPHeaders, HTTPInputError
+except ImportError:
+    from tornado.httputil import parse_response_start_line, HTTPHeaders, HTTPInputError
 import salt.utils.atomicfile
 
 # Import salt libs

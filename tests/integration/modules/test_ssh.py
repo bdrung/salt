@@ -18,7 +18,10 @@ import salt.utils.files
 import salt.utils.platform
 
 # Import 3rd-party libs
-from tornado.httpclient import HTTPClient
+try:
+    from tornado4.httpclient import HTTPClient
+except ImportError:
+    from tornado.httpclient import HTTPClient
 
 SUBSALT_DIR = os.path.join(TMP, 'subsalt')
 AUTHORIZED_KEYS = os.path.join(SUBSALT_DIR, 'authorized_keys')

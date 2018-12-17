@@ -24,7 +24,10 @@ from salt.utils.cache import CacheCli
 
 # Import Third Party Libs
 from salt.ext import six
-import tornado.gen as tornado_gen
+try:
+    import tornado4.gen as tornado_gen
+except ImportError:
+    import tornado.gen as tornado_gen
 try:
     from M2Crypto import RSA
     HAS_M2 = True

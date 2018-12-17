@@ -291,11 +291,14 @@ Setup
 '''
 from __future__ import absolute_import, print_function, unicode_literals
 
-from tornado.websocket import WebSocketHandler
+try:
+    from tornado4.websocket import WebSocketHandler
+    import tornado4.gen as tornado_gen
+except ImportError:
+    from tornado.websocket import WebSocketHandler
+    import tornado.gen as tornado_gen
 from . import event_processor
 from .saltnado import _check_cors_origin
-
-import tornado.gen as tornado_gen
 
 import salt.utils.json
 import salt.netapi

@@ -590,7 +590,7 @@ def dependency_information(include_salt_cloud=False):
         ('RAET', 'raet', '__version__'),
         ('ZMQ', 'zmq', 'zmq_version'),
         ('Mako', 'mako', '__version__'),
-        ('Tornado', 'tornado', 'version'),
+        ('Tornado', 'tornado4', 'version'),
         ('timelib', 'timelib', 'version'),
         ('dateutil', 'dateutil', '__version__'),
         ('pygit2', 'pygit2', '__version__'),
@@ -616,7 +616,13 @@ def dependency_information(include_salt_cloud=False):
             yield name, attr
             continue
         try:
-            imp = __import__(imp)
+            try:
+                imp = __import__(imp)
+            except ImportError:
+                if imp == 'tornado4':
+                    imp = __import__('tornado')
+                else:
+                    raise
             version = getattr(imp, attr)
             if callable(version):
                 version = version()
