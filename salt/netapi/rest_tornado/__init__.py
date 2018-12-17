@@ -18,13 +18,20 @@ log = logging.getLogger(__virtualname__)
 min_tornado_version = '4.0'
 has_tornado = False
 try:
-    from tornado import version as tornado_version
+    try:
+        from tornado4 import version as tornado_version
+    except ImportError:
+        from tornado import version as tornado_version
     if _StrictVersion(tornado_version) >= _StrictVersion(min_tornado_version):
         has_tornado = True
     else:
         log.error('rest_tornado requires at least tornado %s', min_tornado_version)
-    from tornado.ioloop import IOLoop
-    from tornado.web import Application
+    try:
+        from tornado4.ioloop import IOLoop
+        from tornado4.web import Application
+    except ImportError:
+        from tornado.ioloop import IOLoop
+        from tornado.web import Application
 except (ImportError, TypeError) as err:
     has_tornado = False
     log.error('ImportError! %s', err)
@@ -117,7 +124,10 @@ def start():
             ssl_opts.update({'keyfile': mod_opts['ssl_key']})
         kwargs['ssl_options'] = ssl_opts
 
-    from tornado.httpserver import HTTPServer
+    try:
+        from tornado4.httpserver import HTTPServer
+    except ImportError:
+        from tornado.httpserver import HTTPServer
     http_server = HTTPServer(get_application(__opts__), **kwargs)
     try:
         http_server.bind(mod_opts['port'],

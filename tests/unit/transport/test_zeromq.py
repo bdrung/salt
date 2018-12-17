@@ -19,12 +19,21 @@ except ImportError:
     from distro import linux_distribution
 
 # Import 3rd-party libs
+try:
+    import tornado4
+    from tornado4.testing import AsyncTestCase
+    import tornado4.gen as tornado_gen
+    # Expose tornado4 as tornado for zmq.eventloop.ioloop
+    import sys
+    sys.modules['tornado'] = tornado4
+except ImportError:
+    from tornado.testing import AsyncTestCase
+    import tornado.gen as tornado_gen
+
 import zmq.eventloop.ioloop
 # support pyzmq 13.0.x, TODO: remove once we force people to 14.0.x
 if not hasattr(zmq.eventloop.ioloop, 'ZMQIOLoop'):
     zmq.eventloop.ioloop.ZMQIOLoop = zmq.eventloop.ioloop.IOLoop
-from tornado.testing import AsyncTestCase
-import tornado.gen as tornado_gen
 
 # Import Salt libs
 import salt.config

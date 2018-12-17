@@ -66,12 +66,20 @@ from salt.ext.six.moves.urllib.parse import urlencode as _urlencode
 # pylint: enable=import-error,no-name-in-module
 
 # Don't need a try/except block, since Salt depends on tornado
-from tornado.httputil import url_concat
-from tornado.simple_httpclient import SimpleAsyncHTTPClient
-from tornado.httpclient import AsyncHTTPClient, HTTPClient, HTTPError
+try:
+    from tornado4.httputil import url_concat
+    from tornado4.simple_httpclient import SimpleAsyncHTTPClient
+    from tornado4.httpclient import AsyncHTTPClient, HTTPClient, HTTPError
+except ImportError:
+    from tornado.httputil import url_concat
+    from tornado.simple_httpclient import SimpleAsyncHTTPClient
+    from tornado.httpclient import AsyncHTTPClient, HTTPClient, HTTPError
 
 try:
-    from tornado.curl_httpclient import CurlAsyncHTTPClient
+    try:
+        from tornado4.curl_httpclient import CurlAsyncHTTPClient
+    except ImportError:
+        from tornado.curl_httpclient import CurlAsyncHTTPClient
     HAS_CURL_HTTPCLIENT = True
 except ImportError:
     HAS_CURL_HTTPCLIENT = False

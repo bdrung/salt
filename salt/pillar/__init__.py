@@ -10,7 +10,10 @@ import fnmatch
 import os
 import collections
 import logging
-import tornado.gen as tornado_gen
+try:
+    import tornado4.gen as tornado_gen
+except ImportError:
+    import tornado.gen as tornado_gen
 import sys
 import traceback
 import inspect

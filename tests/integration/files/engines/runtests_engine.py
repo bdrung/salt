@@ -24,10 +24,10 @@ import salt.utils.event
 import salt.utils.asynchronous
 
 # Import 3rd-party libs
-from tornado import gen
-from tornado import ioloop
-from tornado import netutil
-from tornado import iostream
+try:
+    from tornado4 import gen, ioloop, netutil, iostream
+except ImportError:
+    from tornado import gen, ioloop, netutil, iostream
 
 log = logging.getLogger(__name__)
 

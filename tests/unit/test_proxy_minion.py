@@ -8,9 +8,14 @@ from __future__ import absolute_import
 import copy
 
 import logging
-import tornado
-from tornado.ioloop import IOLoop
-import tornado.testing
+try:
+    import tornado4
+    from tornado4.ioloop import IOLoop
+    import tornado4.testing
+except ImportError:
+    import tornado
+    from tornado.ioloop import IOLoop
+    import tornado.testing
 
 # Import Salt Testing libs
 from tests.support.unit import TestCase, skipIf

@@ -138,6 +138,22 @@ MOCK_MODULES = [
     'tornado.websocket',
     'tornado.locks',
 
+    'tornado4',
+    'tornado4.concurrent',
+    'tornado4.escape',
+    'tornado4.gen',
+    'tornado4.httpclient',
+    'tornado4.httpserver',
+    'tornado4.httputil',
+    'tornado4.ioloop',
+    'tornado4.iostream',
+    'tornado4.netutil',
+    'tornado4.simple_httpclient',
+    'tornado4.stack_context',
+    'tornado4.web',
+    'tornado4.websocket',
+    'tornado4.locks',
+
     'ws4py',
     'ws4py.server',
     'ws4py.server.cherrypyserver',
@@ -210,6 +226,7 @@ for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = Mock(mapping=MOCK_MODULES_MAPPING.get(mod_name))
 
 # Define a fake version attribute for the following libs.
+sys.modules['tornado4'].version_info = (0, 0, 0)
 sys.modules['libcloud'].__version__ = '0.0.0'
 sys.modules['msgpack'].version = (1, 0, 0)
 sys.modules['psutil'].version_info = (3, 0, 0)

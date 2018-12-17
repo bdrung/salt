@@ -34,7 +34,10 @@ import salt.defaults.exitcodes
 from salt.utils.ctx import RequestContext
 
 # pylint: enable=no-name-in-module,redefined-builtin
-import tornado
+try:
+    import tornado4 as tornado
+except ImportError:
+    import tornado
 
 HAS_PSUTIL = False
 try:
@@ -114,10 +117,14 @@ from salt.exceptions import (
     SaltMasterUnresolvableError
 )
 
-
-import tornado.gen as tornado_gen  # pylint: disable=F0401
-from tornado.ioloop import PeriodicCallback  # pylint: disable=F0401
-from tornado.stack_context import ExceptionStackContext, StackContext
+try:
+    import tornado4.gen as tornado_gen  # pylint: disable=F0401
+    from tornado4.ioloop import PeriodicCallback  # pylint: disable=F0401
+    from tornado4.stack_context import ExceptionStackContext, StackContext
+except ImportError:
+    import tornado.gen as tornado_gen  # pylint: disable=F0401
+    from tornado.ioloop import PeriodicCallback  # pylint: disable=F0401
+    from tornado.stack_context import ExceptionStackContext, StackContext
 
 log = logging.getLogger(__name__)
 

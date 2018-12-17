@@ -4,9 +4,14 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 # Import 3rd-party libs
-from tornado.testing import gen_test
-import tornado.gen as tornado_gen
-from tornado.testing import AsyncTestCase
+try:
+    from tornado4.testing import gen_test
+    import tornado4.gen as tornado_gen
+    from tornado4.testing import AsyncTestCase
+except ImportError:
+    from tornado.testing import gen_test
+    import tornado.gen as tornado_gen
+    from tornado.testing import AsyncTestCase
 
 import salt.utils.asynchronous as asynchronous
 
