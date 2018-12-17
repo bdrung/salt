@@ -5,8 +5,8 @@ Helpers/utils for working with tornado asynchronous stuff
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-import tornado.ioloop
-import tornado.concurrent
+from tornado.ioloop import IOLoop
+from tornado.concurrent import Future as TornadoFuture
 import contextlib
 from salt.utils import zeromq
 
@@ -16,7 +16,7 @@ def current_ioloop(io_loop):
     '''
     A context manager that will set the current ioloop to io_loop for the context
     '''
-    orig_loop = tornado.ioloop.IOLoop.current()
+    orig_loop = IOLoop.current()
     io_loop.make_current()
     try:
         yield
@@ -60,7 +60,7 @@ class SyncWrapper(object):
                 # Overload the ioloop for the func call-- since it might call .current()
                 with current_ioloop(self.io_loop):
                     ret = attr(*args, **kwargs)
-                    if isinstance(ret, tornado.concurrent.Future):
+                    if isinstance(ret, TornadoFuture):
                         ret = self._block_future(ret)
                     return ret
             return wrap

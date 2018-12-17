@@ -30,8 +30,8 @@ import tempfile
 import textwrap
 import threading
 import time
-import tornado.ioloop
-import tornado.web
+from tornado.ioloop import IOLoop
+from tornado.web import Application, StaticFileHandler
 import types
 
 # Import 3rd-party libs
@@ -1506,16 +1506,16 @@ class Webserver(object):
         self.wait = wait
         self.handler = handler \
             if handler is not None \
-            else tornado.web.StaticFileHandler
+            else StaticFileHandler
         self.web_root = None
 
     def target(self):
         '''
         Threading target which stands up the tornado application
         '''
-        self.ioloop = tornado.ioloop.IOLoop()
+        self.ioloop = IOLoop()
         self.ioloop.make_current()
-        self.application = tornado.web.Application(
+        self.application = Application(
             [(r'/(.*)', self.handler, {'path': self.root})])
         self.application.listen(self.port)
         self.ioloop.start()

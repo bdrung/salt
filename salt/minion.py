@@ -122,7 +122,8 @@ from salt.exceptions import (
 
 
 import tornado.gen as tornado_gen  # pylint: disable=F0401
-import tornado.ioloop  # pylint: disable=F0401
+from tornado.ioloop import PeriodicCallback  # pylint: disable=F0401
+from tornado.stack_context import ExceptionStackContext, StackContext
 
 log = logging.getLogger(__name__)
 
@@ -1410,7 +1411,7 @@ class Minion(MinionBase):
                     return True
                 timeout_handler = handle_timeout
 
-            with tornado.stack_context.ExceptionStackContext(timeout_handler):
+            with ExceptionStackContext(timeout_handler):
                 self._send_req_async(load, timeout, callback=lambda f: None)  # pylint: disable=unexpected-keyword-arg
         return True
 
@@ -1534,7 +1535,7 @@ class Minion(MinionBase):
                     get_proc_dir(opts['cachedir'], uid=uid)
                     )
 
-        with tornado.stack_context.StackContext(minion_instance.ctx):
+        with StackContext(minion_instance.ctx):
             if isinstance(data['fun'], tuple) or isinstance(data['fun'], list):
                 Minion._thread_multi_return(minion_instance, opts, data)
             else:
@@ -1925,7 +1926,7 @@ class Minion(MinionBase):
                 timeout_handler()
                 return ''
         else:
-            with tornado.stack_context.ExceptionStackContext(timeout_handler):
+            with ExceptionStackContext(timeout_handler):
                 ret_val = self._send_req_async(load, timeout=timeout, callback=lambda f: None)  # pylint: disable=unexpected-keyword-arg
 
         log.trace('ret_val = %s', ret_val)  # pylint: disable=no-member
@@ -2011,7 +2012,7 @@ class Minion(MinionBase):
                 timeout_handler()
                 return ''
         else:
-            with tornado.stack_context.ExceptionStackContext(timeout_handler):
+            with ExceptionStackContext(timeout_handler):
                 ret_val = self._send_req_async(load, timeout=timeout, callback=lambda f: None)  # pylint: disable=unexpected-keyword-arg
 
         log.trace('ret_val = %s', ret_val)  # pylint: disable=no-member
@@ -2498,14 +2499,14 @@ class Minion(MinionBase):
                 if beacons and self.connected:
                     self._fire_master(events=beacons)
 
-            new_periodic_callbacks['beacons'] = tornado.ioloop.PeriodicCallback(
+            new_periodic_callbacks['beacons'] = PeriodicCallback(
                     handle_beacons, loop_interval * 1000)
             if before_connect:
                 # Make sure there is a chance for one iteration to occur before connect
                 handle_beacons()
 
         if 'cleanup' not in self.periodic_callbacks:
-            new_periodic_callbacks['cleanup'] = tornado.ioloop.PeriodicCallback(
+            new_periodic_callbacks['cleanup'] = PeriodicCallback(
                     self._fallback_cleanups, loop_interval * 1000)
 
         # start all the other callbacks
@@ -2559,14 +2560,14 @@ class Minion(MinionBase):
             # TODO: actually listen to the return and change period
             def handle_schedule():
                 self.process_schedule(self, loop_interval)
-            new_periodic_callbacks['schedule'] = tornado.ioloop.PeriodicCallback(handle_schedule, 1000)
+            new_periodic_callbacks['schedule'] = PeriodicCallback(handle_schedule, 1000)
 
             if before_connect:
                 # Make sure there is a chance for one iteration to occur before connect
                 handle_schedule()
 
         if 'cleanup' not in self.periodic_callbacks:
-            new_periodic_callbacks['cleanup'] = tornado.ioloop.PeriodicCallback(
+            new_periodic_callbacks['cleanup'] = PeriodicCallback(
                     self._fallback_cleanups, loop_interval * 1000)
 
         # start all the other callbacks
@@ -2624,7 +2625,7 @@ class Minion(MinionBase):
                     self._fire_master('ping', 'minion_ping', sync=False, timeout_handler=ping_timeout_handler)
                 except Exception:
                     log.warning('Attempt to ping master failed.', exc_on_loglevel=logging.DEBUG)
-            self.periodic_callbacks['ping'] = tornado.ioloop.PeriodicCallback(ping_master, ping_interval * 1000)
+            self.periodic_callbacks['ping'] = PeriodicCallback(ping_master, ping_interval * 1000)
             self.periodic_callbacks['ping'].start()
 
         # add handler to subscriber
@@ -2754,7 +2755,7 @@ class Syndic(Minion):
             log.warning('Unable to forward pub data: %s', args[1])
             return True
 
-        with tornado.stack_context.ExceptionStackContext(timeout_handler):
+        with ExceptionStackContext(timeout_handler):
             self.local.pub_async(data['tgt'],
                                  data['fun'],
                                  data['arg'],
@@ -3091,9 +3092,9 @@ class SyndicManager(MinionBase):
         self.io_loop.add_future(future, self.reconnect_event_bus)
 
         # forward events every syndic_event_forward_timeout
-        self.forward_events = tornado.ioloop.PeriodicCallback(self._forward_events,
-                                                              self.opts['syndic_event_forward_timeout'] * 1000,
-                                                              )
+        self.forward_events = PeriodicCallback(self._forward_events,
+                                               self.opts['syndic_event_forward_timeout'] * 1000,
+                                               )
         self.forward_events.start()
 
         # Make sure to gracefully handle SIGUSR1
@@ -3749,7 +3750,7 @@ class ProxyMinion(Minion):
                     get_proc_dir(opts['cachedir'], uid=uid)
                     )
 
-        with tornado.stack_context.StackContext(minion_instance.ctx):
+        with StackContext(minion_instance.ctx):
             if isinstance(data['fun'], tuple) or isinstance(data['fun'], list):
                 Minion._thread_multi_return(minion_instance, opts, data)
             else:

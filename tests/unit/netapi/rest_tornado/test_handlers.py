@@ -25,11 +25,10 @@ except ImportError:
 # Import 3rd-party libs
 # pylint: disable=import-error
 try:
-    import tornado.escape
-    import tornado.testing
-    import tornado.concurrent
+    from tornado.escape import native_str
     from tornado.testing import AsyncHTTPTestCase, gen_test
     from tornado.httpclient import HTTPRequest, HTTPError
+    from tornado.web import Application
     from tornado.websocket import websocket_connect
     HAS_TORNADO = True
 except ImportError:
@@ -120,7 +119,7 @@ class SaltnadoTestCase(TestCase, AdaptedConfigurationTestCaseMixin, AsyncHTTPTes
             del self.application
 
     def build_tornado_app(self, urls):
-        application = tornado.web.Application(urls, debug=True)
+        application = Application(urls, debug=True)
 
         application.auth = self.auth
         application.opts = self.opts
@@ -138,7 +137,7 @@ class SaltnadoTestCase(TestCase, AdaptedConfigurationTestCaseMixin, AsyncHTTPTes
             if response.headers.get('Content-Type') == 'application/json':
                 response._body = response.body.decode('utf-8')
             else:
-                response._body = tornado.escape.native_str(response.body)
+                response._body = native_str(response.body)
         return response
 
     def fetch(self, path, **kwargs):

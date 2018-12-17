@@ -11,13 +11,14 @@ import os
 import shutil
 import tempfile
 import textwrap
-import tornado.ioloop
 import logging
 import stat
 try:
     import pwd  # pylint: disable=unused-import
 except ImportError:
     pass
+
+from tornado.ioloop import IOLoop
 
 # Import Salt Testing Libs
 from tests.support.mixins import LoaderModuleMockMixin
@@ -108,7 +109,7 @@ def _rmtree_error(func, path, excinfo):
 
 def _clear_instance_map():
     try:
-        del salt.utils.gitfs.GitFS.instance_map[tornado.ioloop.IOLoop.current()]
+        del salt.utils.gitfs.GitFS.instance_map[IOLoop.current()]
     except KeyError:
         pass
 

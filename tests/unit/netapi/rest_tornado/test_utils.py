@@ -10,8 +10,7 @@ from tests.support.unit import skipIf
 # Import 3rd-party libs
 # pylint: disable=import-error
 try:
-    import tornado.testing
-    import tornado.concurrent
+    from tornado.concurrent import Future as TornadoFuture
     from tornado.testing import AsyncTestCase
     HAS_TORNADO = True
 except ImportError:
@@ -44,7 +43,7 @@ class TestSaltnadoUtils(AsyncTestCase):
         # create a few futures
         futures = []
         for x in range(0, 3):
-            future = tornado.concurrent.Future()
+            future = TornadoFuture()
             future.add_done_callback(self.stop)
             futures.append(future)
 

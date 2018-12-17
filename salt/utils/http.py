@@ -66,12 +66,12 @@ from salt.ext.six.moves.urllib.parse import urlencode as _urlencode
 # pylint: enable=import-error,no-name-in-module
 
 # Don't need a try/except block, since Salt depends on tornado
-import tornado.httputil
-import tornado.simple_httpclient
+from tornado.httputil import url_concat
+from tornado.simple_httpclient import SimpleAsyncHTTPClient
 from tornado.httpclient import HTTPClient
 
 try:
-    import tornado.curl_httpclient
+    from tornado.curl_httpclient import CurlAsyncHTTPClient
     HAS_CURL_HTTPCLIENT = True
 except ImportError:
     HAS_CURL_HTTPCLIENT = False
@@ -212,7 +212,7 @@ def query(url,
 
     # Some libraries don't support separation of url and GET parameters
     # Don't need a try/except block, since Salt depends on tornado
-    url_full = tornado.httputil.url_concat(url, params) if params else url
+    url_full = url_concat(url, params) if params else url
 
     if ca_bundle is None:
         ca_bundle = get_ca_bundle(opts)
@@ -521,12 +521,12 @@ def query(url,
                 log.error(ret['error'])
                 return ret
 
-            tornado.httpclient.AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
+            tornado.httpclient.AsyncHTTPClient.configure('CurlAsyncHTTPClient')
             client_argspec = salt.utils.args.get_function_argspec(
-                    tornado.curl_httpclient.CurlAsyncHTTPClient.initialize)
+                    CurlAsyncHTTPClient.initialize)
         else:
             client_argspec = salt.utils.args.get_function_argspec(
-                    tornado.simple_httpclient.SimpleAsyncHTTPClient.initialize)
+                    SimpleAsyncHTTPClient.initialize)
 
         supports_max_body_size = 'max_body_size' in client_argspec.args
 

@@ -46,7 +46,7 @@ except ImportError:
 # Import Tornado Libs
 import tornado
 import tornado.gen as tornado_gen
-import tornado.concurrent
+from tornado.concurrent import Future as TornadoFuture
 
 # Import third party libs
 try:
@@ -1097,7 +1097,7 @@ class AsyncReqMessageClient(object):
         Return a future which will be completed when the message has a response
         '''
         if future is None:
-            future = tornado.concurrent.Future()
+            future = TornadoFuture()
             future.tries = tries
             future.attempts = 0
             future.timeout = timeout

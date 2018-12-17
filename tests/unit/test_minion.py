@@ -18,8 +18,10 @@ import salt.minion
 import salt.utils.event as event
 from salt.exceptions import SaltSystemExit
 import salt.syspaths
-import tornado
-import tornado.testing
+from tornado.concurrent import Future as TornadoFuture
+from tornado.ioloop import IOLoop
+from tornado import gen
+from tornado.testing import AsyncTestCase
 from salt.ext.six.moves import range
 
 
@@ -120,7 +122,7 @@ class MinionTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
         mock_data = {'fun': 'foo.bar',
                      'jid': 123}
         mock_jid_queue = [123]
-        minion = salt.minion.Minion(mock_opts, jid_queue=copy.copy(mock_jid_queue), io_loop=tornado.ioloop.IOLoop())
+        minion = salt.minion.Minion(mock_opts, jid_queue=copy.copy(mock_jid_queue), io_loop= IOLoop())
         try:
             ret = minion._handle_decoded_payload(mock_data).result()
             self.assertEqual(minion.jid_queue, mock_jid_queue)
@@ -141,7 +143,7 @@ class MinionTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             mock_data = {'fun': 'foo.bar',
                          'jid': mock_jid}
             mock_jid_queue = [123, 456]
-            minion = salt.minion.Minion(mock_opts, jid_queue=copy.copy(mock_jid_queue), io_loop=tornado.ioloop.IOLoop())
+            minion = salt.minion.Minion(mock_opts, jid_queue=copy.copy(mock_jid_queue), io_loop= IOLoop())
             try:
 
                 # Assert that the minion's jid_queue attribute matches the mock_jid_queue as a baseline
@@ -170,7 +172,7 @@ class MinionTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             mock_data = {'fun': 'foo.bar',
                          'jid': 789}
             mock_jid_queue = [123, 456]
-            minion = salt.minion.Minion(mock_opts, jid_queue=copy.copy(mock_jid_queue), io_loop=tornado.ioloop.IOLoop())
+            minion = salt.minion.Minion(mock_opts, jid_queue=copy.copy(mock_jid_queue), io_loop= IOLoop())
             try:
 
                 # Assert that the minion's jid_queue attribute matches the mock_jid_queue as a baseline
@@ -194,13 +196,13 @@ class MinionTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
                 patch('salt.utils.process.SignalHandlingMultiprocessingProcess.start', MagicMock(return_value=True)), \
                 patch('salt.utils.process.SignalHandlingMultiprocessingProcess.join', MagicMock(return_value=True)), \
                 patch('salt.utils.minion.running', MagicMock(return_value=[])), \
-                patch('tornado.gen.sleep', MagicMock(return_value=tornado.concurrent.Future())):
+                patch('tornado.gen.sleep', MagicMock(return_value=TornadoFuture())):
             process_count_max = 10
             mock_opts = salt.config.DEFAULT_MINION_OPTS
             mock_opts['minion_jid_queue_hwm'] = 100
             mock_opts["process_count_max"] = process_count_max
 
-            io_loop = tornado.ioloop.IOLoop()
+            io_loop =  IOLoop()
             minion = salt.minion.Minion(mock_opts, jid_queue=[], io_loop=io_loop)
             try:
 
@@ -208,7 +210,7 @@ class MinionTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
                 class SleepCalledEception(Exception):
                     """Thrown when sleep is called"""
                     pass
-                tornado.gen.sleep.return_value.set_exception(SleepCalledEception())
+                gen.sleep.return_value.set_exception(SleepCalledEception())
 
                 # up until process_count_max: gen.sleep does not get called, processes are started normally
                 for i in range(process_count_max):
@@ -241,7 +243,7 @@ class MinionTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
                 patch('salt.utils.process.SignalHandlingMultiprocessingProcess.join', MagicMock(return_value=True)):
             mock_opts = self.get_config('minion', from_scratch=True)
             mock_opts['beacons_before_connect'] = True
-            io_loop = tornado.ioloop.IOLoop()
+            io_loop =  IOLoop()
             io_loop.make_current()
             minion = salt.minion.Minion(mock_opts, io_loop=io_loop)
             try:
@@ -267,7 +269,7 @@ class MinionTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
                 patch('salt.utils.process.SignalHandlingMultiprocessingProcess.join', MagicMock(return_value=True)):
             mock_opts = self.get_config('minion', from_scratch=True)
             mock_opts['scheduler_before_connect'] = True
-            io_loop = tornado.ioloop.IOLoop()
+            io_loop =  IOLoop()
             io_loop.make_current()
             minion = salt.minion.Minion(mock_opts, io_loop=io_loop)
             try:
@@ -284,7 +286,7 @@ class MinionTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
 
 
 @skipIf(NO_MOCK, NO_MOCK_REASON)
-class MinionAsyncTestCase(TestCase, AdaptedConfigurationTestCaseMixin, tornado.testing.AsyncTestCase):
+class MinionAsyncTestCase(TestCase, AdaptedConfigurationTestCaseMixin, AsyncTestCase):
 
     @skip_if_not_root
     def test_sock_path_len(self):
