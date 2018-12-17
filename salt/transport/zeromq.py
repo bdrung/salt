@@ -44,9 +44,14 @@ except ImportError:
     HAS_ZMQ_MONITOR = False
 
 # Import Tornado Libs
-import tornado
-import tornado.gen as tornado_gen
-from tornado.concurrent import Future as TornadoFuture
+try:
+    import tornado4
+    import tornado4.gen as tornado_gen
+    from tornado4.concurrent import Future as TornadoFuture
+except ImportError:
+    import tornado
+    import tornado.gen as tornado_gen
+    from tornado.concurrent import Future as TornadoFuture
 
 # Import third party libs
 try:

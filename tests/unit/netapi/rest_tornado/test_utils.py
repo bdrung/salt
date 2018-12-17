@@ -10,8 +10,12 @@ from tests.support.unit import skipIf
 # Import 3rd-party libs
 # pylint: disable=import-error
 try:
-    from tornado.concurrent import Future as TornadoFuture
-    from tornado.testing import AsyncTestCase
+    try:
+        from tornado4.concurrent import Future as TornadoFuture
+        from tornado4.testing import AsyncTestCase
+    except ImportError:
+        from tornado.concurrent import Future as TornadoFuture
+        from tornado.testing import AsyncTestCase
     HAS_TORNADO = True
 except ImportError:
     HAS_TORNADO = False

@@ -66,8 +66,12 @@ from salt.ext.six.moves import range
 
 # Import third party libs
 from salt.ext import six
-from tornado.ioloop import IOLoop
-from tornado.iostream import StreamClosedError
+try:
+    from tornado4.ioloop import IOLoop
+    from tornado4.iostream import StreamClosedError
+except ImportError:
+    from tornado.ioloop import IOLoop
+    from tornado.iostream import StreamClosedError
 
 # Import salt libs
 import salt.config

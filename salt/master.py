@@ -27,7 +27,10 @@ from salt.ext.six.moves import range
 from salt.utils.zeromq import zmq, ZMQDefaultLoop, install_zmq, ZMQ_VERSION_INFO
 # pylint: enable=import-error,no-name-in-module,redefined-builtin
 
-import tornado.gen as tornado_gen  # pylint: disable=F0401
+try:
+    import tornado4.gen as tornado_gen  # pylint: disable=F0401
+except ImportError:
+    import tornado.gen as tornado_gen  # pylint: disable=F0401
 
 # Import salt libs
 import salt.crypt

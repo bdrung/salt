@@ -15,7 +15,10 @@ from tests.support.helpers import destructiveTest
 import salt.utils.path
 
 # Import 3rd-party libs
-from tornado.httpclient import HTTPClient
+try:
+    from tornado4.httpclient import HTTPClient
+except ImportError:
+    from tornado.httpclient import HTTPClient
 
 GEM = 'tidy'
 GEM_VER = '1.1.2'

@@ -21,9 +21,14 @@ import traceback
 import binascii
 import weakref
 import getpass
-import tornado.gen as tornado_gen
-from tornado.ioloop import IOLoop
-from tornado.concurrent import Future as TornadoFuture
+try:
+    import tornado4.gen as tornado_gen
+    from tornado4.ioloop import IOLoop
+    from tornado4.concurrent import Future as TornadoFuture
+except ImportError:
+    import tornado.gen as tornado_gen
+    from tornado.ioloop import IOLoop
+    from tornado.concurrent import Future as TornadoFuture
 
 # Import third party libs
 from salt.ext.six.moves import zip  # pylint: disable=import-error,redefined-builtin

@@ -79,9 +79,14 @@ class AsyncChannel(object):
 
     @classmethod
     def _config_resolver(cls, num_threads=10):
-        from tornado.netutil import Resolver
+        try:
+            from tornado4.netutil import Resolver
+            tornado_name = 'tornado4'
+        except ImportError:
+            from tornado.netutil import Resolver
+            tornado_name = 'tornado'
         Resolver.configure(
-                'tornado.netutil.ThreadedResolver',
+                tornado_name + '.netutil.ThreadedResolver',
                 num_threads=num_threads)
         cls._resolver_configured = True
 

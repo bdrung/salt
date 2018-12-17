@@ -25,11 +25,18 @@ except ImportError:
 # Import 3rd-party libs
 # pylint: disable=import-error
 try:
-    from tornado.escape import native_str
-    from tornado.testing import AsyncHTTPTestCase, gen_test
-    from tornado.httpclient import HTTPRequest, HTTPError
-    from tornado.web import Application
-    from tornado.websocket import websocket_connect
+    try:
+        from tornado4.escape import native_str
+        from tornado4.testing import AsyncHTTPTestCase, gen_test
+        from tornado4.httpclient import HTTPRequest, HTTPError
+        from tornado4.web import Application
+        from tornado4.websocket import websocket_connect
+    except ImportError:
+        from tornado.escape import native_str
+        from tornado.testing import AsyncHTTPTestCase, gen_test
+        from tornado.httpclient import HTTPRequest, HTTPError
+        from tornado.web import Application
+        from tornado.websocket import websocket_connect
     HAS_TORNADO = True
 except ImportError:
     HAS_TORNADO = False

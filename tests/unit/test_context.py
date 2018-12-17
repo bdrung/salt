@@ -5,9 +5,14 @@
 '''
 # Import python libs
 from __future__ import absolute_import
-from tornado.stack_context import StackContext, run_with_stack_context
-import tornado.gen as tornado_gen
-from tornado.testing import AsyncTestCase, gen_test
+try:
+    from tornado4.stack_context import StackContext, run_with_stack_context
+    import tornado4.gen as tornado_gen
+    from tornado4.testing import AsyncTestCase, gen_test
+except ImportError:
+    from tornado.stack_context import StackContext, run_with_stack_context
+    import tornado.gen as tornado_gen
+    from tornado.testing import AsyncTestCase, gen_test
 import threading
 import time
 

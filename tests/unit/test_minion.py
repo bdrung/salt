@@ -18,10 +18,18 @@ import salt.minion
 import salt.utils.event as event
 from salt.exceptions import SaltSystemExit
 import salt.syspaths
-from tornado.concurrent import Future as TornadoFuture
-from tornado.ioloop import IOLoop
-from tornado import gen
-from tornado.testing import AsyncTestCase
+try:
+    from tornado4.concurrent import Future as TornadoFuture
+    from tornado4.ioloop import IOLoop
+    from tornado4 import gen
+    from tornado4.testing import AsyncTestCase
+    TORNADO_MODULE_NAME = "tornado4"
+except ImportError:
+    from tornado.concurrent import Future as TornadoFuture
+    from tornado.ioloop import IOLoop
+    from tornado import gen
+    from tornado.testing import AsyncTestCase
+    TORNADO_MODULE_NAME = "tornado"
 from salt.ext.six.moves import range
 
 
@@ -196,7 +204,7 @@ class MinionTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
                 patch('salt.utils.process.SignalHandlingMultiprocessingProcess.start', MagicMock(return_value=True)), \
                 patch('salt.utils.process.SignalHandlingMultiprocessingProcess.join', MagicMock(return_value=True)), \
                 patch('salt.utils.minion.running', MagicMock(return_value=[])), \
-                patch('tornado.gen.sleep', MagicMock(return_value=TornadoFuture())):
+                patch(TORNADO_MODULE_NAME + '.gen.sleep', MagicMock(return_value=TornadoFuture())):
             process_count_max = 10
             mock_opts = salt.config.DEFAULT_MINION_OPTS
             mock_opts['minion_jid_queue_hwm'] = 100

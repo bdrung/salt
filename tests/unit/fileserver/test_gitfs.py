@@ -18,7 +18,10 @@ try:
 except ImportError:
     pass
 
-from tornado.ioloop import IOLoop
+try:
+    from tornado4.ioloop import IOLoop
+except ImportError:
+    from tornado.ioloop import IOLoop
 
 # Import Salt Testing Libs
 from tests.support.mixins import LoaderModuleMockMixin

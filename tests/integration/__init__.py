@@ -77,8 +77,12 @@ try:
 except ImportError:
     import socketserver
 
-from tornado import gen
-from tornado import ioloop
+try:
+    from tornado4 import gen
+    from tornado4 import ioloop
+except ImportError:
+    from tornado import gen
+    from tornado import ioloop
 
 # Import salt tests support libs
 from tests.support.processes import SaltMaster, SaltMinion, SaltSyndic

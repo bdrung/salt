@@ -18,13 +18,20 @@ log = logging.getLogger(__virtualname__)
 min_tornado_version = '4.0'
 has_tornado = False
 try:
-    from tornado import version as tornado_version
+    try:
+        from tornado4 import version as tornado_version
+    except ImportError:
+        from tornado import version as tornado_version
     if _StrictVersion(tornado_version) >= _StrictVersion(min_tornado_version):
         has_tornado = True
     else:
         log.error('rest_tornado requires at least tornado %s', min_tornado_version)
-    from tornado.ioloop import IOLoop
-    from tornado.web import Application
+    try:
+        from tornado4.ioloop import IOLoop
+        from tornado4.web import Application
+    except ImportError:
+        from tornado.ioloop import IOLoop
+        from tornado.web import Application
 except (ImportError, TypeError) as err:
     has_tornado = False
     log.error('ImportError! %s', err)

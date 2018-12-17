@@ -33,7 +33,10 @@ import salt.log.setup
 from salt.ext import six
 
 # Import 3rd-party libs
-from tornado.stack_context import StackContext
+try:
+    from tornado4.stack_context import StackContext
+except ImportError:
+    from tornado.stack_context import StackContext
 
 log = logging.getLogger(__name__)
 

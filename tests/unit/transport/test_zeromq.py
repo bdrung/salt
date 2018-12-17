@@ -20,8 +20,12 @@ import zmq.eventloop.ioloop
 # support pyzmq 13.0.x, TODO: remove once we force people to 14.0.x
 if not hasattr(zmq.eventloop.ioloop, 'ZMQIOLoop'):
     zmq.eventloop.ioloop.ZMQIOLoop = zmq.eventloop.ioloop.IOLoop
-from tornado.testing import AsyncTestCase
-import tornado.gen as tornado_gen
+try:
+    from tornado4.testing import AsyncTestCase
+    import tornado4.gen as tornado_gen
+except ImportError:
+    from tornado.testing import AsyncTestCase
+    import tornado.gen as tornado_gen
 
 # Import Salt libs
 import salt.config

@@ -6,8 +6,12 @@ ZMQ-specific functions
 from __future__ import absolute_import, print_function, unicode_literals
 
 import logging
-from tornado import version_info as tornado_version_info
-from tornado.ioloop import IOLoop
+try:
+    from tornado4 import version_info as tornado_version_info
+    from tornado4.ioloop import IOLoop
+except ImportError:
+    from tornado import version_info as tornado_version_info
+    from tornado.ioloop import IOLoop
 from salt.exceptions import SaltSystemExit
 
 log = logging.getLogger(__name__)

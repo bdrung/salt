@@ -196,12 +196,20 @@ from collections import defaultdict
 
 # pylint: disable=import-error
 import cgi
-from tornado.escape import native_str
-import tornado.httpserver
-from tornado.ioloop import IOLoop
-from tornado.web import RequestHandler, asynchronous
-import tornado.gen as tornado_gen
-from tornado.concurrent import Future
+try:
+    from tornado4.escape import native_str
+    import tornado4.httpserver
+    from tornado4.ioloop import IOLoop
+    from tornado4.web import RequestHandler, asynchronous
+    import tornado4.gen as tornado_gen
+    from tornado4.concurrent import Future
+except ImportError:
+    from tornado.escape import native_str
+    import tornado.httpserver
+    from tornado.ioloop import IOLoop
+    from tornado.web import RequestHandler, asynchronous
+    import tornado.gen as tornado_gen
+    from tornado.concurrent import Future
 # pylint: enable=import-error
 
 # salt imports

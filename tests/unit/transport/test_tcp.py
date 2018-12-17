@@ -7,10 +7,16 @@
 from __future__ import absolute_import, print_function, unicode_literals
 import threading
 
-import tornado.gen as tornado_gen
-from tornado.ioloop import IOLoop, TimeoutError as TornadoTimeoutError
-from tornado.concurrent import Future as TornadoFuture
-from tornado.testing import AsyncTestCase, gen_test
+try:
+    import tornado4.gen as tornado_gen
+    from tornado4.ioloop import IOLoop, TimeoutError as TornadoTimeoutError
+    from tornado4.concurrent import Future as TornadoFuture
+    from tornado4.testing import AsyncTestCase, gen_test
+except ImportError:
+    import tornado.gen as tornado_gen
+    from tornado.ioloop import IOLoop, TimeoutError as TornadoTimeoutError
+    from tornado.concurrent import Future as TornadoFuture
+    from tornado.testing import AsyncTestCase, gen_test
 
 import salt.config
 from salt.ext import six
