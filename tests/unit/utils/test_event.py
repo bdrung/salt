@@ -329,6 +329,8 @@ class TestAsyncEventPublisher(AsyncTestCase):
         self.tag, self.data = salt.utils.event.SaltEvent.unpack(raw)
         self.stop()
 
+    @skipIf(True, "Failing when using openssl 1.1.1 with TLS 1.3 support. "
+                  "See https://github.com/tornadoweb/tornado/issues/2536")
     def test_event_subscription(self):
         """Test a single event is received"""
         me = salt.utils.event.MinionEvent(self.opts, listen=True)
