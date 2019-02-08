@@ -1084,6 +1084,7 @@ class TestCustomExtensions(TestCase):
                                      dict(opts=self.local_opts, saltenv='test', salt=self.local_salt))
         self.assertEqual(rendered, '16777216')
 
+    @skipIf(True, "Needs Internet access.")
     def test_http_query(self):
         '''
         Test the `http_query` Jinja filter.

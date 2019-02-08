@@ -169,6 +169,9 @@ class RootsTest(TestCase, AdaptedConfigurationTestCaseMixin, LoaderModuleMockMix
         self.assertIn('empty_dir', ret)
         self.assertIn(UNICODE_DIRNAME, ret)
 
+    @skipIf(not os.path.islink(os.path.join(os.path.dirname(__file__),
+                                            "../../integration/files/file/base/dest_sym")),
+            "Broken release tarball - tests/integration/files/file/base/source_sym must be a symlink.")
     def test_symlink_list(self):
         orig_file_roots = self.opts['file_roots']
         try:

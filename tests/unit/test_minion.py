@@ -231,6 +231,7 @@ class MinionTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             finally:
                 minion.destroy()
 
+    @skip_if_not_root  # Otherwise fails with: Permission denied: '/var/cache/salt'
     def test_beacons_before_connect(self):
         '''
         Tests that the 'beacons_before_connect' option causes the beacons to be initialized before connect.
@@ -257,6 +258,7 @@ class MinionTestCase(TestCase, AdaptedConfigurationTestCaseMixin):
             finally:
                 minion.destroy()
 
+    @skip_if_not_root  # Otherwise fails with: Permission denied: '/var/cache/salt'
     def test_scheduler_before_connect(self):
         '''
         Tests that the 'scheduler_before_connect' option causes the scheduler to be initialized before connect.
