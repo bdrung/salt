@@ -8,6 +8,7 @@
 from __future__ import absolute_import
 import fnmatch
 import os
+import unittest
 
 # Import Salt libs
 import salt.utils.path
@@ -97,6 +98,7 @@ class BadTestModuleNamesTestCase(TestCase):
         error_msg += 'If it is a tests module, then please rename as suggested.'
         self.assertEqual([], bad_names, error_msg)
 
+    @unittest.skip("Does not work against install salt package.")
     def test_module_name_source_match(self):
         '''
         Check all the test mods and check if they correspond to actual files in
