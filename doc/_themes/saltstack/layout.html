@@ -19,14 +19,8 @@
     {%- set titlesuffix = "" %}
 {%- endif %}
 
-{# Remove old version of jQuery #}
-{% set js_blacklist = [
-    '_static/jquery.js',
-] %}
-
 {# Add to top of the list #}
 {% set script_files = [
-    '_static/js/vendor/jquery-1.9.1.js',
     '_static/js/vendor/bootstrap.min.js',
 ] + script_files %}
 
