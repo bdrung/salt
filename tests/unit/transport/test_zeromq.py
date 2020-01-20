@@ -125,6 +125,7 @@ class BaseZMQReqCase(TestCase, AdaptedConfigurationTestCaseMixin):
         return payload, {'fun': 'send_clear'}
 
 
+@skipIf(True, 'Skipping until https://github.com/saltstack/salt/issues/32902 gets fixed')
 class ClearReqTestCases(BaseZMQReqCase, ReqChannelMixin):
     '''
     Test all of the clear msg stuff
@@ -156,7 +157,7 @@ class ClearReqTestCases(BaseZMQReqCase, ReqChannelMixin):
 
 
 @flaky
-@skipIf(ON_SUSE, 'Skipping until https://github.com/saltstack/salt/issues/32902 gets fixed')
+@skipIf(True, 'Skipping until https://github.com/saltstack/salt/issues/32902 gets fixed')
 class AESReqTestCases(BaseZMQReqCase, ReqChannelMixin):
     def setUp(self):
         self.channel = salt.transport.client.ReqChannel.factory(self.minion_config)
