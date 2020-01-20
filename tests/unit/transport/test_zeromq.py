@@ -129,6 +129,9 @@ class BaseZMQReqCase(TestCase, AdaptedConfigurationTestCaseMixin):
         return payload, {"fun": "send_clear"}
 
 
+@skipIf(
+    True, "Skipping until https://github.com/saltstack/salt/issues/32902 gets fixed"
+)
 class ClearReqTestCases(BaseZMQReqCase, ReqChannelMixin):
     """
     Test all of the clear msg stuff
@@ -171,7 +174,6 @@ class ClearReqTestCases(BaseZMQReqCase, ReqChannelMixin):
 @flaky
 @not_runs_on(
     kernel="linux",
-    os_familiy="Suse",
     reason="Skipping until https://github.com/saltstack/salt/issues/32902 gets fixed",
 )
 class AESReqTestCases(BaseZMQReqCase, ReqChannelMixin):
