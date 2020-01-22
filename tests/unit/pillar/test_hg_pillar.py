@@ -73,6 +73,7 @@ class HgPillarTestCase(TestCase, AdaptedConfigurationTestCaseMixin, LoaderModule
         subprocess.check_call(['hg', 'ci', '-A', '-R', hg_repo, '-m', 'first commit', '-u', COMMIT_USER_NAME])
         return hg_repo
 
+    @skipIf(True, "Failing with 'The renderer yaml_jinja is unavailable'. See https://github.com/saltstack/salt/issues/55935")
     def test_base(self):
         'check hg repo is imported correctly'
         mypillar = hg_pillar.ext_pillar('*', None, 'file://{0}'.format(self.hg_repo_path))
