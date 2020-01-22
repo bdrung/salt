@@ -298,6 +298,7 @@ class DNSlookupsCase(TestCase):
                         msg='Error parsing DNSSEC\'d {0} returns'.format(rec_t)
                     )
 
+    @skipIf(True, "Needs Internet access.")
     def test_lookup_with_servers(self):
         rights = {
             'A': [

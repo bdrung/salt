@@ -1140,6 +1140,7 @@ class TestCustomExtensions(TestCase):
         self.assertEqual(rendered, '16777216')
 
     @flaky
+    @skipIf(True, "Needs Internet access.")
     def test_http_query(self):
         '''
         Test the `http_query` Jinja filter.
