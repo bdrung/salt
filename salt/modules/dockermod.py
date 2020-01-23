@@ -3384,7 +3384,7 @@ def run_container(image,
                         exc_info.setdefault('other_errors', []).append(
                             'Failed to auto_remove container: {0}'.format(rm_exc)
                         )
-                # Raise original exception with additonal info
+                # Raise original exception with additional info
                 raise CommandExecutionError(exc.__str__(), info=exc_info)
 
         # Start the container
@@ -4003,7 +4003,7 @@ def build(path=None,
             'The \'image\' argument to docker.build has been deprecated, '
             'please use \'repository\' instead.'
         )
-        respository = image
+        repository = image
 
     if repository or tag:
         if not repository and tag:
@@ -4145,7 +4145,7 @@ def commit(name,
             'The \'image\' argument to docker.commit has been deprecated, '
             'please use \'repository\' instead.'
         )
-        respository = image
+        repository = image
 
     if not isinstance(repository, six.string_types):
         repository = six.text_type(repository)
@@ -4296,7 +4296,7 @@ def import_(source,
             'The \'image\' argument to docker.import has been deprecated, '
             'please use \'repository\' instead.'
         )
-        respository = image
+        repository = image
 
     if not isinstance(repository, six.string_types):
         repository = six.text_type(repository)
@@ -4395,7 +4395,7 @@ def load(path, repository=None, tag=None, image=None):
 
       *(Only present if tag was specified and tagging was successful)*
     - ``Time_Elapsed`` - Time in seconds taken to load the file
-    - ``Warning`` - Message describing any problems encountered in attemp to
+    - ``Warning`` - Message describing any problems encountered in attempt to
       tag the topmost layer
 
       *(Only present if tag was specified and tagging failed)*
@@ -4414,7 +4414,7 @@ def load(path, repository=None, tag=None, image=None):
             'The \'image\' argument to docker.load has been deprecated, '
             'please use \'repository\' instead.'
         )
-        respository = image
+        repository = image
 
     if (repository or tag) and not (repository and tag):
         # Have to have both or neither
@@ -5016,7 +5016,7 @@ def tag_(name, repository, tag='latest', force=False, image=None):
             'The \'image\' argument to docker.tag has been deprecated, '
             'please use \'repository\' instead.'
         )
-        respository = image
+        repository = image
 
     if not isinstance(repository, six.string_types):
         repository = six.text_type(repository)

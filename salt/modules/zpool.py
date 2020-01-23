@@ -9,8 +9,8 @@ Module for running ZFS zpool command
 :platform:      illumos,freebsd,linux
 
 .. versionchanged:: 2018.3.1
-  Big refactor to remove duplicate code, better type converions and improved
-  consistancy in output.
+  Big refactor to remove duplicate code, better type conversions and improved
+  consistency in output.
 
 '''
 from __future__ import absolute_import, print_function, unicode_literals
@@ -294,7 +294,7 @@ def iostat(zpool=None, sample_time=5, parsable=True):
         'name',
         'capacity-alloc', 'capacity-free',
         'operations-read', 'operations-write',
-        'bandwith-read', 'bandwith-write',
+        'bandwidth-read', 'bandwidth-write',
     ]
     root_vdev = None
     vdev = None
