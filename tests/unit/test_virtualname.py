@@ -19,7 +19,7 @@ import salt.ext.six as six
 
 # Import Salt Testing libs
 from tests.support.paths import CODE_DIR
-from tests.support.unit import TestCase
+from tests.support.unit import TestCase, skipIf
 
 log = logging.getLogger(__name__)
 
@@ -81,6 +81,7 @@ class VirtualNameTestCase(TestCase):
                     )
         return ret
 
+    @skipIf(not os.path.isdir(os.path.join(CODE_DIR, 'salt/')), "Failed to find salt directory in '{}'.".format(CODE_DIR))
     def test_check_virtualname(self):
         '''
         Test that the virtualname is in __name__ of the module
