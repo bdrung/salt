@@ -69,7 +69,7 @@ save_config:
     instead of this option to improve performance.  The default behavior
     controlled by this option is preserved for backwards compatibility.
 
-Conection SSH Args:
+Connection SSH Args:
 
     prompt_name:
         (REQUIRED when `connection` is `ssh`)
@@ -119,7 +119,7 @@ Conection SSH Args:
         Extra optional arguments used for connecting to switch.
 
     key_accept:
-        Wheather or not to accept the host key of the switch on initial login.
+        Whether or not to accept the host key of the switch on initial login.
         Default: `False`
 
 Connection NXAPI Args:
