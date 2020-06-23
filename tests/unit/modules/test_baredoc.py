@@ -3,8 +3,6 @@
 # Import Python libs
 from __future__ import absolute_import
 
-import os
-
 # Import module
 import salt.modules.baredoc as baredoc
 from tests.support.mixins import LoaderModuleMockMixin
@@ -22,10 +20,8 @@ class BaredocTest(TestCase, LoaderModuleMockMixin):
     def setup_loader_modules(self):
         return {
             baredoc: {
-                "__opts__": {
-                    "extension_modules": os.path.join(RUNTIME_VARS.CODE_DIR, "salt"),
-                },
-                "__grains__": {"saltpath": os.path.join(RUNTIME_VARS.CODE_DIR, "salt")},
+                "__opts__": {"extension_modules": RUNTIME_VARS.SALT_CODE_DIR},
+                "__grains__": {"saltpath": RUNTIME_VARS.SALT_CODE_DIR},
             }
         }
 
