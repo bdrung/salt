@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
 """
     :codeauthor: Nicole Thomas <nicole@saltstack.com>
 """
 
 # Import python libs
-from __future__ import absolute_import, print_function, unicode_literals
-
 import os
 import sys
 import tempfile
@@ -358,7 +355,7 @@ class CMDMODTestCase(TestCase, LoaderModuleMockMixin):
         when bash is the default shell for the selected user
         """
 
-        class _CommandHandler(object):
+        class _CommandHandler:
             """
             Class for capturing cmd
             """
