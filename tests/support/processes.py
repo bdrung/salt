@@ -14,7 +14,7 @@ from __future__ import absolute_import
 
 import logging
 
-from saltfactories.utils.processes.helpers import (  # pylint: disable=unused-import
+from saltfactories.utils.processes import (  # pylint: disable=unused-import
     collect_child_processes,
     terminate_process,
     terminate_process_list,
@@ -34,14 +34,14 @@ except ImportError:
     # If this happens, we are running under pytest which uninstalls pytest-salt due to impatabilites
     # These imports won't actually work but these classes are only used when running under runtests,
     # so, we're just making sure we also don't hit NameError's
-    from saltfactories.utils.processes.salts import SaltCallCLI as PytestSaltCall
-    from saltfactories.utils.processes.salts import SaltCLI as PytestSalt
-    from saltfactories.utils.processes.salts import SaltKeyCLI as PytestSaltKey
-    from saltfactories.utils.processes.salts import SaltMaster as PytestSaltMaster
-    from saltfactories.utils.processes.salts import SaltMinion as PytestSaltMinion
-    from saltfactories.utils.processes.salts import SaltProxyMinion as PytestSaltProxy
-    from saltfactories.utils.processes.salts import SaltRunCLI as PytestSaltRun
-    from saltfactories.utils.processes.salts import SaltSyndic as PytestSaltSyndic
+    from tests.support.saltfactories_compat import SaltCallCLI as PytestSaltCall
+    from tests.support.saltfactories_compat import SaltCLI as PytestSalt
+    from tests.support.saltfactories_compat import SaltKeyCLI as PytestSaltKey
+    from tests.support.saltfactories_compat import SaltMaster as PytestSaltMaster
+    from tests.support.saltfactories_compat import SaltMinion as PytestSaltMinion
+    from tests.support.saltfactories_compat import SaltProxyMinion as PytestSaltProxy
+    from tests.support.saltfactories_compat import SaltRunCLI as PytestSaltRun
+    from tests.support.saltfactories_compat import SaltSyndic as PytestSaltSyndic
 
 log = logging.getLogger(__name__)
 

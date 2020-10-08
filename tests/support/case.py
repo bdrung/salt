@@ -25,7 +25,7 @@ import time
 from datetime import datetime, timedelta
 
 import salt.utils.files
-from saltfactories.utils.processes.helpers import terminate_process
+from saltfactories.utils.processes import terminate_process
 from tests.support.cli_scripts import ScriptPathMixin
 from tests.support.helpers import RedirectStdStreams, requires_sshd_server
 from tests.support.mixins import (  # pylint: disable=unused-import

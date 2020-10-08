@@ -21,10 +21,9 @@ import salt.utils.path
 import salt.utils.yaml
 from salt.fileserver import gitfs
 from salt.pillar import git_pillar
+from saltfactories.factories.daemons.sshd import SshdDaemonFactory
 from saltfactories.utils.ports import get_unused_localhost_port
-from saltfactories.utils.processes.bases import FactoryDaemonScriptBase
-from saltfactories.utils.processes.helpers import start_daemon, terminate_process
-from saltfactories.utils.processes.sshd import SshdDaemon
+from saltfactories.utils.processes import terminate_process
 from tests.support.case import ModuleCase
 from tests.support.helpers import patched_environ, requires_system_grains
 from tests.support.mixins import (
@@ -33,7 +32,9 @@ from tests.support.mixins import (
     SaltReturnAssertsMixin,
 )
 from tests.support.mock import patch
+from tests.support.processes import start_daemon
 from tests.support.runtests import RUNTIME_VARS
+from tests.support.saltfactories_compat import FactoryDaemonScriptBase
 from tests.support.unit import SkipTest
 
 try:
@@ -228,7 +229,7 @@ class SSHDMixin(SaltClientMixin, SaltReturnAssertsMixin):
             if cls.sshd_proc is None:
                 cls.sshd_proc = start_daemon(
                     cls.sshd_bin,
-                    SshdDaemon,
+                    SshdDaemonFactory,
                     config_dir=cls.sshd_config_dir,
                     serve_port=cls.sshd_port,
                 )

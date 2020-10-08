@@ -41,8 +41,9 @@ import salt.utils.stringutils
 import salt.utils.versions
 from salt.ext import six
 from salt.ext.six.moves import builtins, range
+from saltfactories.exceptions import FactoryFailure as ProcessFailed
 from saltfactories.utils.ports import get_unused_localhost_port
-from saltfactories.utils.processes.bases import ProcessResult
+from saltfactories.utils.processes import ProcessResult
 from tests.support.mock import patch
 from tests.support.runtests import RUNTIME_VARS
 from tests.support.sminion import create_sminion
@@ -1674,10 +1675,24 @@ class VirtualEnv(object):
         kwargs.setdefault("stderr", subprocess.PIPE)
         kwargs.setdefault("universal_newlines", True)
         proc = subprocess.run(args, check=False, **kwargs)
-        ret = ProcessResult(proc.returncode, proc.stdout, proc.stderr, proc.args)
+        ret = ProcessResult(
+            exitcode=proc.returncode,
+            stdout=proc.stdout,
+            stderr=proc.stderr,
+            cmdline=proc.args,
+        )
         log.debug(ret)
         if check is True:
-            proc.check_returncode()
+            try:
+                proc.check_returncode()
+            except subprocess.CalledProcessError:
+                raise ProcessFailed(
+                    "Command failed return code check",
+                    cmdline=proc.args,
+                    stdout=proc.stdout,
+                    stderr=proc.stderr,
+                    exitcode=proc.returncode,
+                )
         return ret
 
     def _get_real_python(self):

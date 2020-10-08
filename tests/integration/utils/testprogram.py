@@ -30,7 +30,7 @@ import salt.utils.psutil_compat as psutils
 import salt.utils.yaml
 from salt.ext import six
 from salt.ext.six.moves import range
-from saltfactories.utils.processes.helpers import (
+from saltfactories.utils.processes import (
     terminate_process,
     terminate_process_list,
 )
