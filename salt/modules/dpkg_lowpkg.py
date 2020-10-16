@@ -316,7 +316,7 @@ def info(*packages, **kwargs):
         "------\\n",
     ] + list(packages)
 
-    call = __salt__["cmd.run_all"](cmd, python_chell=False)
+    call = __salt__["cmd.run_all"](cmd, python_shell=False)
     if call["retcode"]:
         if failhard:
             raise CommandExecutionError(
