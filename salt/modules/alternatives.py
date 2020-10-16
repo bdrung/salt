@@ -83,22 +83,35 @@ def show_link(name):
     elif __grains__["os_family"] == "Suse":
         path = "/var/lib/rpm/"
     else:
-        path = "/var/lib/dpkg/"
+        # Debian based systems
+        path = None
 
-    path += "alternatives/{0}".format(name)
+    if path:
+        path += "alternatives/{}".format(name)
 
-    try:
-        with salt.utils.files.fopen(path, "rb") as r_file:
-            contents = salt.utils.stringutils.to_unicode(r_file.read())
-            return contents.splitlines(True)[1].rstrip("\n")
-    except OSError:
-        log.error("alternatives: %s does not exist", name)
-    except (IOError, IndexError) as exc:  # pylint: disable=duplicate-except
-        log.error(
-            "alternatives: unable to get master link for %s. " "Exception: %s",
-            name,
-            exc,
-        )
+        try:
+            with salt.utils.files.fopen(path, "rb") as r_file:
+                contents = salt.utils.stringutils.to_unicode(r_file.read())
+                return contents.splitlines(True)[1].rstrip("\n")
+        except FileNotFoundError:
+            log.error("alternatives: %s does not exist", name)
+        except (OSError, IndexError) as exc:
+            log.error(
+                "alternatives: unable to get master link for %s. Exception: %s",
+                name,
+                exc,
+            )
+
+    # Debian based systems
+    cmd = [_get_cmd(), "--query", name]
+    out = __salt__["cmd.run_all"](cmd, python_shell=False, ignore_retcode=True)
+    if out["retcode"] > 0 and out["stderr"] != "":
+        return False
+
+    first_block = out["stdout"].split("\n\n", 1)[0]
+    for line in first_block.split("\n"):
+        if line.startswith("Link:"):
+            return line.split(":", 1)[1].strip()
 
     return False
 
