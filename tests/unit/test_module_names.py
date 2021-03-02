@@ -184,6 +184,7 @@ class BadTestModuleNamesTestCase(TestCase):
             "integration.states.test_renderers",
             "integration.wheel.test_client",
             "multimaster.minion.test_event",
+            "unit.auth.test_auth",
             "unit.cache.test_cache",
             "unit.serializers.test_serializers",
             "unit.setup.test_install",
