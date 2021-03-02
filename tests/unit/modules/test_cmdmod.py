@@ -553,7 +553,7 @@ class CMDMODTestCase(TestCase, LoaderModuleMockMixin):
         stdout = b"test"
         proc = MagicMock(return_value=MockTimedProc(stdout=stdout))
 
-        msg = "INFO:Executing command 'some command' in directory"
+        msg = "INFO:Executing command 'some' in directory"
         with patch("salt.utils.timed_subprocess.TimedProc", proc):
             with TstSuiteLoggingHandler() as log_handler:
                 ret = cmdmod.run_all("some command", output_loglevel="quiet")
