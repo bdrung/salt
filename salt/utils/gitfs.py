@@ -18,7 +18,10 @@ import shutil
 import stat
 import subprocess
 import time
-from tornado.ioloop import IOLoop
+try:
+    from tornado4.ioloop import IOLoop
+except ImportError:
+    from tornado.ioloop import IOLoop
 import weakref
 from datetime import datetime
 

@@ -12,7 +12,10 @@ from __future__ import absolute_import, unicode_literals, print_function
 import os
 import hashlib
 import time
-from tornado.testing import AsyncTestCase
+try:
+    from tornado4.testing import AsyncTestCase
+except ImportError:
+    from tornado.testing import AsyncTestCase
 import zmq
 import zmq.eventloop.ioloop
 # support pyzmq 13.0.x, TODO: remove once we force people to 14.0.x

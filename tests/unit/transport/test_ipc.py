@@ -10,9 +10,14 @@ import errno
 import socket
 import logging
 
-import tornado.gen as tornado_gen
-import tornado.ioloop
-from tornado.testing import AsyncTestCase
+try:
+    import tornado4.gen as tornado_gen
+    import tornado4.ioloop
+    from tornado4.testing import AsyncTestCase
+except ImportError:
+    import tornado.gen as tornado_gen
+    import tornado.ioloop
+    from tornado.testing import AsyncTestCase
 
 import salt.config
 import salt.exceptions

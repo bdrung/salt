@@ -30,8 +30,12 @@ import tempfile
 import textwrap
 import threading
 import time
-from tornado.ioloop import IOLoop
-from tornado.web import Application, StaticFileHandler
+try:
+    from tornado4.ioloop import IOLoop
+    from tornado4.web import Application, StaticFileHandler
+except ImportError:
+    from tornado.ioloop import IOLoop
+    from tornado.web import Application, StaticFileHandler
 import types
 
 # Import 3rd-party libs

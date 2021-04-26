@@ -5,8 +5,12 @@ Helpers/utils for working with tornado asynchronous stuff
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from tornado.ioloop import IOLoop
-from tornado.concurrent import Future as TornadoFuture
+try:
+    from tornado4.ioloop import IOLoop
+    from tornado4.concurrent import Future as TornadoFuture
+except ImportError:
+    from tornado.ioloop import IOLoop
+    from tornado.concurrent import Future as TornadoFuture
 import contextlib
 from salt.utils import zeromq
 

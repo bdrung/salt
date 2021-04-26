@@ -5,9 +5,14 @@ Send events from webhook api
 from __future__ import absolute_import, print_function, unicode_literals
 
 # import tornado library
-from tornado.httpserver import HTTPServer
-from tornado.ioloop import IOLoop
-from tornado.web import Application, RequestHandler
+try:
+    from tornado4.httpserver import HTTPServer
+    from tornado4.ioloop import IOLoop
+    from tornado4.web import Application, RequestHandler
+except ImportError:
+    from tornado.httpserver import HTTPServer
+    from tornado.ioloop import IOLoop
+    from tornado.web import Application, RequestHandler
 
 # import salt libs
 import salt.utils.event

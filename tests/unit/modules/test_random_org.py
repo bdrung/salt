@@ -14,7 +14,10 @@ from tests.support.unit import TestCase
 import salt.modules.random_org as random_org
 
 # Import 3rd-party libs
-from tornado.httpclient import HTTPClient
+try:
+    from tornado4.httpclient import HTTPClient
+except ImportError:
+    from tornado.httpclient import HTTPClient
 
 
 def check_status():

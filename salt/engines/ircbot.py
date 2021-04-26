@@ -64,8 +64,12 @@ import socket
 import ssl
 from collections import namedtuple
 
-from tornado.ioloop import IOLoop
-from tornado.iostream import IOStream, SSLIOStream
+try:
+    from tornado4.ioloop import IOLoop
+    from tornado4.iostream import IOStream, SSLIOStream
+except ImportError:
+    from tornado.ioloop import IOLoop
+    from tornado.iostream import IOStream, SSLIOStream
 
 import logging
 log = logging.getLogger(__name__)

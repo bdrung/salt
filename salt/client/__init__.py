@@ -68,7 +68,10 @@ except ImportError:
 # pylint: enable=import-error
 
 # Import tornado
-import tornado.gen as tornado_gen  # pylint: disable=F0401
+try:
+    import tornado4.gen as tornado_gen  # pylint: disable=F0401
+except ImportError:
+    import tornado.gen as tornado_gen  # pylint: disable=F0401
 
 log = logging.getLogger(__name__)
 
