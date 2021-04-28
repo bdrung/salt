@@ -5,6 +5,7 @@
 """
 
 import builtins
+import getpass
 import logging
 import os
 import re
@@ -445,7 +446,7 @@ def test_run_cwd_in_combination_with_runas():
     """
     cmd = "pwd"
     cwd = "/tmp"
-    runas = os.getlogin()
+    runas = getpass.getuser()
 
     with patch.dict(cmdmod.__grains__, {"os": "Darwin", "os_family": "Solaris"}):
         stdout = cmdmod._run(cmd, cwd=cwd, runas=runas).get("stdout")
