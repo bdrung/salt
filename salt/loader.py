@@ -28,7 +28,6 @@ import salt.defaults.events
 import salt.defaults.exitcodes
 import salt.loader_context
 import salt.syspaths
-import salt.utils.args
 import salt.utils.context
 import salt.utils.data
 import salt.utils.dictupdate
@@ -913,7 +912,7 @@ def grains(opts, force_refresh=False, proxy=None, context=None):
             # proxymodule for retrieving information from the connected
             # device.
             log.trace("Loading %s grain", key)
-            parameters = salt.utils.args.get_function_argspec(funcs[key]).args
+            parameters = inspect.signature(funcs[key]).parameters
             kwargs = {}
             if "proxy" in parameters:
                 kwargs["proxy"] = proxy
