@@ -658,7 +658,7 @@ class Schedule:
                 tag="/salt/minion/minion_schedule_next_fire_time_complete",
             )
 
-    def job_status(self, name, fire_event=False):
+    def job_status(self, name, fire_event=False, fmt="%Y-%m-%dT%H:%M:%S"):
         """
         Return the specified schedule item
         """
@@ -666,6 +666,14 @@ class Schedule:
         if fire_event:
             schedule = self._get_schedule()
             data = schedule.get(name, {})
+
+            # Convert datetime objects into formatted strings
+            data = {
+                key: value.strftime(fmt)
+                if isinstance(value, datetime.datetime)
+                else value
+                for key, value in data.items()
+            }
 
             # Fire the complete event back along with updated list of schedule
             with salt.utils.event.get_event(
