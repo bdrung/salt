@@ -1326,7 +1326,7 @@ def job_status(name):
 
     .. code-block:: bash
 
-        salt '*' schedule.job_status
+        salt '*' schedule.job_status job_name
 
     """
 
