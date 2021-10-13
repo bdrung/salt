@@ -27,6 +27,12 @@
 {% set script_files = [
     '_static/js/vendor/bootstrap.min.js',
 ] + script_files %}
+{%- if not '_static/searchtools.js' in script_files %}
+{%- set script_files = script_files + ['_static/searchtools.js'] %}
+{%- endif %}
+{%- if not '_static/language_data.js' in script_files %}
+{%- set script_files = script_files + ['_static/language_data.js'] %}
+{%- endif %}
 
 {%- macro relbar() %}
     <div class="related">
