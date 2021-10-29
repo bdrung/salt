@@ -43,6 +43,7 @@ def test_tornado_import_override(tmp_path):
         assert ret.stdout.strip() == "salt.ext.tornado"
 
 
+@pytest.mark.xfail(reason="Bug https://github.com/saltstack/salt/issues/61149")
 @pytest.mark.parametrize(
     "six_import_line,six_print_line",
     (
