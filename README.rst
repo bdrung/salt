@@ -1,38 +1,3 @@
-.. image:: https://img.shields.io/github/license/saltstack/salt
-   :alt: Salt Project License: Apache v2.0
-   :target: https://github.com/saltstack/salt/blob/master/LICENSE
-
-.. image:: https://img.shields.io/pypi/dm/salt?label=pypi%20downloads
-   :alt: PyPi Package Downloads
-   :target: https://pypi.org/project/salt
-
-.. image:: https://img.shields.io/lgtm/grade/python/github/saltstack/salt
-   :alt: PyPi Package Downloads
-   :target: https://lgtm.com/projects/g/saltstack/salt/context:python
-
-.. image:: https://img.shields.io/badge/slack-@saltstackcommunity-blue.svg?logo=slack
-   :alt: Salt Project Slack Community
-   :target: https://join.slack.com/t/saltstackcommunity/shared_invite/zt-3av8jjyf-oBQ2M0vhXOhJpNpRkPWBvg
-
-.. image:: https://img.shields.io/twitch/status/saltprojectoss
-   :alt: Salt Project Twitch Channel
-   :target: https://www.twitch.tv/saltprojectoss
-
-.. image:: https://img.shields.io/reddit/subreddit-subscribers/saltstack?style=social
-   :alt: Salt Project subreddit
-   :target: https://www.reddit.com/r/saltstack/
-
-.. image:: https://img.shields.io/twitter/follow/Salt_Project_OS?style=social&logo=twitter
-   :alt: Follow SaltStack on Twitter
-   :target: https://twitter.com/intent/follow?screen_name=Salt_Project_OS
-
-.. figure:: https://gitlab.com/saltstack/open/salt-branding-guide/-/raw/master/logos/SaltProject_altlogo_teal.png?inline=true
-   :scale: 80 %
-   :width: 1000px
-   :height: 356px
-   :align: center
-   :alt: Salt Project Logo
-
 * `Latest Salt Documentation`_
 * `Open an issue`_ (bug report, feature request, etc.)
 
