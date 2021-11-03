@@ -5,3 +5,12 @@ very-long-line-length-in-source-file doc/_themes/saltstack/static/js/vendor/mode
 # SSH keys have long line lengths
 very-long-line-length-in-source-file tests/integration/files/file/base/git_pillar/ssh/user/files/authorized_keys *
 very-long-line-length-in-source-file tests/integration/files/file/base/git_pillar/ssh/user/files/*.pub *
+# Ignore lintian alerts for git builds
+repackaged-source-not-advertised [debian/copyright]
+source-contains-prebuilt-javascript-object doc/_themes/saltstack2/static/js/*.js
+source-is-missing doc/_themes/saltstack2/static/js/*.js
+source-ships-excluded-file doc/_themes/saltstack2/*
+very-long-line-length-in-source-file doc/_themes/saltstack2/static/css/*.css *
+very-long-line-length-in-source-file doc/_themes/saltstack2/static/js/*.min.js *
+very-long-line-length-in-source-file doc/_themes/saltstack2/layout.html *
+very-long-line-length-in-source-file rfcs/*.md *
