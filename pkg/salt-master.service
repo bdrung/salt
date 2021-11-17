@@ -8,6 +8,11 @@ LimitNOFILE=100000
 Type=notify
 NotifyAccess=all
 ExecStart=/usr/bin/salt-master
+User=salt
+Group=salt
+CacheDirectory=salt/master
+RuntimeDirectory=salt
+StateDirectory=salt/pki/master
 
 [Install]
 WantedBy=multi-user.target
