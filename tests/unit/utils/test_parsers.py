@@ -985,7 +985,7 @@ class SaltRunOptionParserTestCase(ParserBase, TestCase):
 
     def test_jid_option(self):
         jid = salt.utils.jid.gen_jid({})
-        args = ["--jid", jid]
+        args = ["--jid", jid, "--log-file", self.log_file]
 
         parser = self.parser()
         parser.parse_args(args)
@@ -993,7 +993,7 @@ class SaltRunOptionParserTestCase(ParserBase, TestCase):
 
     def test_jid_option_invalid(self):
         jid = salt.utils.jid.gen_jid({}) + "A"
-        args = ["--jid", jid]
+        args = ["--jid", jid, "--log-file", self.log_file]
 
         parser = self.parser()
         mock_err = ErrorMock()
@@ -1043,7 +1043,7 @@ class SaltSSHOptionParserTestCase(ParserBase, TestCase):
 
     def test_jid_option(self):
         jid = salt.utils.jid.gen_jid({})
-        args = ["--jid", jid] + self.args
+        args = ["--jid", jid, "--log-file", self.log_file] + self.args
 
         parser = self.parser()
         parser.parse_args(args)
@@ -1051,7 +1051,7 @@ class SaltSSHOptionParserTestCase(ParserBase, TestCase):
 
     def test_jid_option_invalid(self):
         jid = salt.utils.jid.gen_jid({}) + "A"
-        args = ["--jid", jid] + self.args
+        args = ["--jid", jid, "--log-file", self.log_file] + self.args
 
         parser = self.parser()
         mock_err = ErrorMock()
