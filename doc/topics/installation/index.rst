@@ -146,6 +146,44 @@ provided like:
     minimal installation, you might need to install some additional packages
     from your OS vendor.
 
+Default directories
+-------------------
+
+During installation several default directories can be configured:
+
+======================  ============================
+variable                setup.py config option
+======================  ============================
+ROOT_DIR                --salt-root-dir
+SHARE_DIR               --salt-share-dir
+CONFIG_DIR              --salt-config-dir
+CACHE_DIR               --salt-cache-dir
+SOCK_DIR                --salt-sock-dir
+SRV_ROOT_DIR            --salt-srv-root-dir
+STATE_DIR               --salt-state-dir
+BASE_FILE_ROOTS_DIR     --salt-base-file-roots-dir
+BASE_PILLAR_ROOTS_DIR   --salt-base-pillar-roots-dir
+BASE_MASTER_ROOTS_DIR   --salt-base-master-roots-dir
+LOGS_DIR                --salt-logs-dir
+PIDFILE_DIR             --salt-pidfile-dir
+SPM_FORMULA_PATH        --salt-spm-formula-dir
+SPM_PILLAR_PATH         --salt-spm-pillar-dir
+SPM_REACTOR_PATH        --salt-spm-reactor-dir
+HOME_DIR                --salt-home-dir
+======================  ============================
+
+By default, salt tries to determine useful default values for the directories.
+You can override them during installation by specifying the config option. E.g.
+to change `STATE_DIR` from the default `/etc/salt` to `/var/lib/salt`, specify
+`--salt-state-dir` during installation:
+
+.. code-block:: bash
+
+  python setup.py --salt-state-dir=/var/lib/salt install
+
+All the variables listed in the table above are stored in `salt/_syspaths.py`
+during installation.
+
 Optional Dependencies
 ---------------------
 
