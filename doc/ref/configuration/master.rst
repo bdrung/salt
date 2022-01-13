@@ -180,7 +180,7 @@ The path to the master's configuration file.
 ``pki_dir``
 -----------
 
-Default: ``/etc/salt/pki/master``
+Default: ``<STATE_DIR>/pki/master``
 
 The directory to store the pki authentication keys.
 

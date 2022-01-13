@@ -595,7 +595,7 @@ The path to the minion's configuration file.
 ``pki_dir``
 -----------
 
-Default: ``/etc/salt/pki/minion``
+Default: ``<STATE_DIR>/pki/minion``
 
 The directory used to store the minion's public and private keys.
 
