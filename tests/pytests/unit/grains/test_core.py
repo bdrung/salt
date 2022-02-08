@@ -1430,20 +1430,51 @@ def test_astralinuxce_os_grains():
     """
     Test that OS grains are parsed correctly for Astra Linux Orel
     """
+    # os-release data taken from astra-version 8.1.24+v2.12.43.6
+    # found in pool on installer ISO downloaded from
+    # https://mirrors.edge.kernel.org/astra/stable/orel/iso/orel-current.iso
+    _os_release_data = {
+        "PRETTY_NAME": "Astra Linux (Orel 2.12.43)",
+        "NAME": "Astra Linux (Orel)",
+        "ID": "astra",
+        "ID_LIKE": "debian",
+        "ANSI_COLOR": "1;31",
+        "HOME_URL": "http://astralinux.ru",
+        "SUPPORT_URL": "http://astralinux.ru/support",
+        "VARIANT_ID": "orel",
+        "VARIANT": "Orel",
+        "LOGO": "astra",
+        "VERSION_ID": "2.12.43",
+        "VERSION_CODENAME": "orel",
+    }
     _os_release_map = {
-        "_linux_distribution": ("AstraLinuxCE", "2.12.40", "orel"),
+        "_linux_distribution": ("astra", "2.12.43", "orel"),
+    }
+    _lsb_distro_information = {
+        "ID": "AstraLinuxCE",
+        "DESCRIPTION": "Astra Linux CE 2.12.43 (Orel)",
+        "CODENAME": "orel",
+        "RELEASE": "2.12.43",
     }
     expectation = {
         "os": "AstraLinuxCE",
         "os_family": "Debian",
         "oscodename": "orel",
         "osfullname": "AstraLinuxCE",
-        "osrelease": "2.12.40",
-        "osrelease_info": (2, 12, 40),
+        "osrelease": "2.12.43",
+        "osrelease_info": (2, 12, 43),
         "osmajorrelease": 2,
         "osfinger": "AstraLinuxCE-2",
     }
-    _run_os_grains_tests(None, None, _os_release_map, expectation)
+    _run_os_grains_tests(None, _lsb_distro_information, _os_release_map, expectation)
+    _run_os_grains_tests(
+        _os_release_data, _lsb_distro_information, _os_release_map, expectation
+    )
+    expectation["os"] = "Astra (Orel)"
+    expectation["os_family"] = "Astra (Orel)"
+    expectation["osfullname"] = "Astra Linux (Orel)"
+    expectation["osfinger"] = "Astra Linux (Orel)-2"
+    _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
@@ -1451,8 +1482,28 @@ def test_astralinuxse_os_grains():
     """
     Test that OS grains are parsed correctly for Astra Linux Smolensk
     """
+    # /etc/os-release data taken from base-files 7.2astra2
+    # from Docker image crbrka/astra16se:latest
+    _os_release_data = {
+        "PRETTY_NAME": "Astra Linux (Smolensk 1.6)",
+        "NAME": "Astra Linux (Smolensk)",
+        "ID": "astra",
+        "ID_LIKE": "debian",
+        "ANSI_COLOR": "1;31",
+        "HOME_URL": "http://astralinux.ru",
+        "SUPPORT_URL": "http://astralinux.ru/support",
+        "VARIANT_ID": "smolensk",
+        "VARIANT": "Smolensk",
+        "VERSION_ID": "1.6",
+    }
     _os_release_map = {
-        "_linux_distribution": ("AstraLinuxSE", "1.6", "smolensk"),
+        "_linux_distribution": ("astra", "1.6", "smolensk"),
+    }
+    _lsb_distro_information = {
+        "ID": "AstraLinuxSE",
+        "DESCRIPTION": "Astra Linux SE 1.6 (Smolensk)",
+        "CODENAME": "smolensk",
+        "RELEASE": "1.6",
     }
     expectation = {
         "os": "AstraLinuxSE",
@@ -1464,7 +1515,16 @@ def test_astralinuxse_os_grains():
         "osmajorrelease": 1,
         "osfinger": "AstraLinuxSE-1",
     }
-    _run_os_grains_tests(None, None, _os_release_map, expectation)
+    _run_os_grains_tests(None, _lsb_distro_information, _os_release_map, expectation)
+    _run_os_grains_tests(
+        _os_release_data, _lsb_distro_information, _os_release_map, expectation
+    )
+    expectation["os"] = "Astra (Smolensk)"
+    expectation["os_family"] = "Astra (Smolensk)"
+    expectation["osfullname"] = "Astra Linux (Smolensk)"
+    expectation["osfinger"] = "Astra Linux (Smolensk)-1"
+    expectation["oscodename"] = "Astra Linux (Smolensk 1.6)"
+    _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_windows
