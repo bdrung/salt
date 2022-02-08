@@ -2174,15 +2174,9 @@ def _linux_distribution_data():
 
         # To prevent regressions, only let distributions solely
         # use os-release after testing.
-        if os_release["ID"] in (
+        if grains["os_family"] == "Debian" or os_release["ID"] in (
             "almalinux",
-            "astra",
-            "debian",
-            "linuxmint",
-            "mendel",
-            "pop",
             "rocky",
-            "ubuntu",
         ):
             # Solely use os-release data. See description of the function.
             return grains
