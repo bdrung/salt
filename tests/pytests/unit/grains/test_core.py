@@ -6,6 +6,7 @@ tests.pytests.unit.grains.test_core
     :codeauthor: David Murphy <damurphy@vmware.com>
 """
 
+import errno
 import logging
 import os
 import pathlib
@@ -344,8 +345,8 @@ def test_parse_cpe_name_broken(cpe):
 
 def test_missing_os_release():
     with patch("salt.utils.files.fopen", mock_open(read_data={})):
-        os_release = core._parse_os_release("/etc/os-release", "/usr/lib/os-release")
-    assert os_release == {}
+        with pytest.raises(OSError):
+            core._parse_os_release("/etc/os-release", "/usr/lib/os-release")
 
 
 @pytest.mark.skip_unless_on_windows
@@ -420,6 +421,9 @@ def test_gnu_slash_linux_in_os_name():
     path_isfile_mock = MagicMock(side_effect=lambda x: _path_isfile_map.get(x, False))
     cmd_run_mock = MagicMock(side_effect=lambda x: _cmd_run_map[x])
     empty_mock = MagicMock(return_value={})
+    missing_os_release_mock = MagicMock(
+        side_effect=OSError(errno.ENOENT, "no os-release files")
+    )
 
     orig_import = __import__
     built_in = "builtins"
@@ -452,7 +456,7 @@ def test_gnu_slash_linux_in_os_name():
     ), patch.object(
         core, "_parse_lsb_release", empty_mock
     ), patch.object(
-        core, "_parse_os_release", empty_mock
+        core, "_parse_os_release", missing_os_release_mock
     ), patch.object(
         core, "_parse_lsb_release", empty_mock
     ), patch.object(
@@ -565,7 +569,15 @@ def _run_os_grains_tests(
     else:
         os_release_data = os_release_map.get("os_release_file", {})
 
-    os_release_mock = MagicMock(return_value=os_release_data)
+    if os_release_data:
+        os_release_mock = MagicMock(return_value=os_release_data)
+    else:
+        os_release_mock = MagicMock(
+            side_effect=OSError(
+                errno.ENOENT,
+                "Unable to read files /etc/os-release, /usr/lib/os-release",
+            )
+        )
 
     orig_import = __import__
     built_in = "builtins"
@@ -1110,7 +1122,7 @@ def test_pop_focal_os_grains(os_release_dir):
         "osmajorrelease": 20,
         "osfinger": "Pop-20",
     }
-    _run_os_grains_tests(os_release_dir, "pop-20.04", _os_release_map, expectation)
+    _run_os_grains_tests(os_release_dir, None, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
@@ -1131,7 +1143,7 @@ def test_pop_groovy_os_grains(os_release_dir):
         "osmajorrelease": 20,
         "osfinger": "Pop-20",
     }
-    _run_os_grains_tests(os_release_dir, "pop-20.10", _os_release_map, expectation)
+    _run_os_grains_tests(os_release_dir, None, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
