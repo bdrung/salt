@@ -2133,6 +2133,7 @@ def _os_release_to_grains(os_release):
     grains = {
         "os": _derive_os_grain(os_release["NAME"], os_release["ID"]),
         "os_family": _prettify_os_family(family_id),
+        "os_id": os_release["ID"],
         "oscodename": os_release.get("VERSION_CODENAME")
         or _os_release_quirks_for_oscodename(os_release),
         "osfullname": os_release["NAME"].strip(),
@@ -2151,6 +2152,7 @@ def _linux_distribution_data():
     Return a grain dictionary with following keys:
      * os
      * os_family
+     * os_id (ID from os-release)
      * oscodename
      * osfullname
      * osrelease

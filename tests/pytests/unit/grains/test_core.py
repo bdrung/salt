@@ -632,6 +632,7 @@ def _run_os_grains_tests(os_release_data, os_release_map, expectation):
         in {
             "os",
             "os_family",
+            "os_id",
             "osfullname",
             "oscodename",
             "osfinger",
@@ -690,6 +691,7 @@ def test_suse_os_grains_sles11sp4():
         "CPE_NAME": "cpe:/o:suse:sles:11:4",
     }
     expectation = {
+        "os_id": "sles",
         "oscodename": "SUSE Linux Enterprise Server 11 SP4",
         "osfullname": "SLES",
         "osrelease": "11.4",
@@ -715,6 +717,7 @@ def test_suse_os_grains_sles12():
         "CPE_NAME": "cpe:/o:suse:sles:12",
     }
     expectation = {
+        "os_id": "sles",
         "oscodename": "SUSE Linux Enterprise Server 12",
         "osfullname": "SLES",
         "osrelease": "12",
@@ -740,6 +743,7 @@ def test_suse_os_grains_sles12sp1():
         "CPE_NAME": "cpe:/o:suse:sles:12:sp1",
     }
     expectation = {
+        "os_id": "sles",
         "oscodename": "SUSE Linux Enterprise Server 12 SP1",
         "osfullname": "SLES",
         "osrelease": "12.1",
@@ -765,6 +769,7 @@ def test_suse_os_grains_opensuse_leap_42_1():
         "CPE_NAME": "cpe:/o:opensuse:opensuse:42.1",
     }
     expectation = {
+        "os_id": "opensuse",
         "oscodename": "openSUSE Leap 42.1 (x86_64)",
         "osfullname": "Leap",
         "osrelease": "42.1",
@@ -790,6 +795,7 @@ def test_suse_os_grains_tumbleweed():
         "CPE_NAME": "cpe:/o:opensuse:opensuse:20160504",
     }
     expectation = {
+        "os_id": "opensuse",
         "oscodename": "openSUSE Tumbleweed (20160504) (x86_64)",
         "osfullname": "Tumbleweed",
         "osrelease": "20160504",
@@ -820,6 +826,7 @@ def test_debian_9_os_grains():
     expectation = {
         "os": "Debian",
         "os_family": "Debian",
+        "os_id": "debian",
         "oscodename": "stretch",
         "osfullname": "Debian GNU/Linux",
         "osrelease": "9",
@@ -850,6 +857,7 @@ def test_debian_10_os_grains():
     expectation = {
         "os": "Debian",
         "os_family": "Debian",
+        "os_id": "debian",
         "oscodename": "buster",
         "osfullname": "Debian GNU/Linux",
         "osrelease": "10",
@@ -880,6 +888,7 @@ def test_debian_11_os_grains():
     expectation = {
         "os": "Debian",
         "os_family": "Debian",
+        "os_id": "debian",
         "oscodename": "bullseye",
         "osfullname": "Debian GNU/Linux",
         "osrelease": "11",
@@ -911,6 +920,7 @@ def test_centos_8_os_grains():
     expectation = {
         "os": "CentOS",
         "os_family": "RedHat",
+        "os_id": "centos",
         "oscodename": "CentOS Linux 8 (Core)",
         "osfullname": "CentOS Linux",
         "osrelease": "8.1.1911",
@@ -941,6 +951,7 @@ def test_alinux2_os_grains():
     expectation = {
         "os": "Alinux",
         "os_family": "RedHat",
+        "os_id": "alinux",
         "oscodename": "Alibaba Cloud Linux (Aliyun Linux) 2.1903 LTS (Hunting Beagle)",
         "osfullname": "Alibaba Cloud Linux (Aliyun Linux)",
         "osrelease": "2.1903",
@@ -972,6 +983,7 @@ def test_centos_stream_8_os_grains():
     expectation = {
         "os": "CentOS Stream",
         "os_family": "RedHat",
+        "os_id": "centos",
         "oscodename": "CentOS Stream 8",
         "osfullname": "CentOS Stream",
         "osrelease": "8",
@@ -1006,6 +1018,7 @@ def test_rocky_8_os_grains():
     expectation = {
         "os": "Rocky",
         "os_family": "RedHat",
+        "os_id": "rocky",
         "oscodename": "Green Obsidian",
         "osfullname": "Rocky Linux",
         "osrelease": "8.5",
@@ -1059,6 +1072,7 @@ def test_mendel_os_grains():
     expectation = {
         "os": "Mendel",
         "os_family": "Debian",
+        "os_id": "mendel",
         "oscodename": "eagle",
         "osfullname": "Mendel GNU/Linux",
         "osrelease": "5",
@@ -1094,6 +1108,7 @@ def test_almalinux_8_os_grains():
     expectation = {
         "os": "AlmaLinux",
         "os_family": "RedHat",
+        "os_id": "almalinux",
         "oscodename": "Arctic Sphynx",
         "osfullname": "AlmaLinux",
         "osrelease": "8.5",
@@ -1162,6 +1177,7 @@ def test_ubuntu_focal_os_grains():
     expectation = {
         "os": "Ubuntu",
         "os_family": "Debian",
+        "os_id": "ubuntu",
         "oscodename": "focal",
         "osfullname": "Ubuntu",
         "osrelease": "20.04",
@@ -1195,6 +1211,7 @@ def test_ubuntu_impish_os_grains():
     expectation = {
         "os": "Ubuntu",
         "os_family": "Debian",
+        "os_id": "ubuntu",
         "oscodename": "impish",
         "osfullname": "Ubuntu",
         "osrelease": "21.10",
@@ -1228,6 +1245,7 @@ def test_linux_mint_una_os_grains():
     expectation = {
         "os": "Mint",
         "os_family": "Debian",
+        "os_id": "linuxmint",
         "oscodename": "una",
         "osfullname": "Linux Mint",
         "osrelease": "20.3",
@@ -1263,6 +1281,7 @@ def test_pop_focal_os_grains():
     expectation = {
         "os": "Pop",
         "os_family": "Debian",
+        "os_id": "pop",
         "oscodename": "focal",
         "osfullname": "Pop!_OS",
         "osrelease": "20.04",
@@ -1298,6 +1317,7 @@ def test_pop_impish_os_grains():
     expectation = {
         "os": "Pop",
         "os_family": "Debian",
+        "os_id": "pop",
         "oscodename": "impish",
         "osfullname": "Pop!_OS",
         "osrelease": "21.10",
@@ -1333,6 +1353,7 @@ def test_astralinuxce_os_grains():
     expectation = {
         "os": "AstraLinuxCE",
         "os_family": "Debian",
+        "os_id": "astra",
         "oscodename": "orel",
         "osfullname": "Astra Linux (Orel)",
         "osrelease": "2.12.43",
@@ -1365,6 +1386,7 @@ def test_astralinuxse_os_grains():
     expectation = {
         "os": "AstraLinuxSE",
         "os_family": "Debian",
+        "os_id": "astra",
         "oscodename": "smolensk",
         "osfullname": "Astra Linux (Smolensk)",
         "osrelease": "1.6",
