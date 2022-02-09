@@ -2335,6 +2335,8 @@ def os_data():
             grains.update(_smartos_os_data())
         elif os.path.isfile("/etc/release"):
             grains.update(_sunos_release())
+        else:
+            grains["os"] = "Unknown {}".format(grains["kernel"])
         grains.update(_sunos_cpudata())
     elif grains["kernel"] == "VMkernel":
         grains["os"] = "ESXi"
@@ -2382,9 +2384,6 @@ def os_data():
     else:
         grains["os"] = grains["kernel"]
         grains["os_family"] = "Unknown"
-
-    if not grains["os"]:
-        grains["os"] = "Unknown {}".format(grains["kernel"])
 
     grains["osarch"] = _osarch(grains.get("os_family"), grains.get("cpuarch"))
 
