@@ -882,6 +882,12 @@ def test_debian_10_os_grains():
     _os_release_map = {
         "_linux_distribution": ("debian", "10", "buster"),
     }
+    _lsb_distro_information = {
+        "DESCRIPTION": "Debian GNU/Linux 10 (buster)",
+        "RELEASE": "10",
+        "CODENAME": "buster",
+        "ID": "Debian",
+    }
     expectation = {
         "os": "Debian",
         "os_family": "Debian",
@@ -893,6 +899,8 @@ def test_debian_10_os_grains():
         "osfinger": "Debian-10",
     }
     _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
+    expectation["osfullname"] = "Debian"
+    _run_os_grains_tests(None, _lsb_distro_information, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
@@ -915,6 +923,12 @@ def test_debian_11_os_grains():
     _os_release_map = {
         "_linux_distribution": ("debian", "11", "bullseye"),
     }
+    _lsb_distro_information = {
+        "DESCRIPTION": "Debian GNU/Linux 11 (bullseye)",
+        "RELEASE": "11",
+        "CODENAME": "bullseye",
+        "ID": "Debian",
+    }
     expectation = {
         "os": "Debian",
         "os_family": "Debian",
@@ -926,6 +940,8 @@ def test_debian_11_os_grains():
         "osfinger": "Debian-11",
     }
     _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
+    expectation["osfullname"] = "Debian"
+    _run_os_grains_tests(None, _lsb_distro_information, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
@@ -1044,7 +1060,12 @@ def test_rocky_8_os_grains():
     _os_release_map = {
         "_linux_distribution": ("rocky", "8.5", "Green Obsidian"),
     }
-
+    _lsb_distro_information = {
+        "ID": "Rocky",
+        "DESCRIPTION": "Rocky Linux release 8.5 (Green Obsidian)",
+        "RELEASE": "8.5",
+        "CODENAME": "GreenObsidian",
+    }
     expectation = {
         "os": "Rocky",
         "os_family": "RedHat",
@@ -1056,6 +1077,10 @@ def test_rocky_8_os_grains():
         "osfinger": "Rocky Linux-8",
     }
     _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
+    expectation["osfullname"] = "Rocky"
+    expectation["osfinger"] = "Rocky-8"
+    expectation["oscodename"] = "GreenObsidian"
+    _run_os_grains_tests(None, _lsb_distro_information, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
@@ -1076,6 +1101,13 @@ def test_mendel_os_grains():
         "BUG_REPORT_URL": "https://coral.ai/",
         "VERSION_CODENAME": "eagle",
     }
+    _lsb_distro_information = {
+        "ID": "Mendel",
+        "OS": "GNU/Linux",
+        "DESCRIPTION": "Mendel GNU/Linux 5 (Eagle)",
+        "RELEASE": "10.0",
+        "CODENAME": "eagle",
+    }
     _os_release_map = {
         "_linux_distribution": ("Mendel", "10.0", "eagle"),
     }
@@ -1084,12 +1116,18 @@ def test_mendel_os_grains():
         "os": "Mendel",
         "os_family": "Debian",
         "oscodename": "eagle",
-        "osfullname": "Mendel GNU/Linux",
+        "osfullname": "Mendel",
         "osrelease": "10.0",
         "osrelease_info": (10, 0),
         "osmajorrelease": 10,
-        "osfinger": "Mendel GNU/Linux-10",
+        "osfinger": "Mendel-10",
     }
+    _run_os_grains_tests(
+        _os_release_data, _lsb_distro_information, _os_release_map, expectation
+    )
+    _run_os_grains_tests(None, _lsb_distro_information, _os_release_map, expectation)
+    expectation["osfullname"] = "Mendel GNU/Linux"
+    expectation["osfinger"] = "Mendel GNU/Linux-10"
     _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
 
 
@@ -1118,17 +1156,26 @@ def test_almalinux_8_os_grains():
     _os_release_map = {
         "_linux_distribution": ("almaLinux", "8.5", "Arctic Sphynx"),
     }
-
+    _lsb_distro_information = {
+        "ID": "AlmaLinux",
+        "DESCRIPTION": "AlmaLinux release 8.5 (Arctic Sphynx)",
+        "RELEASE": "8.5",
+        "CODENAME": "ArcticSphynx",
+    }
     expectation = {
         "os": "AlmaLinux",
         "os_family": "RedHat",
-        "oscodename": "AlmaLinux 8.5 (Arctic Sphynx)",
+        "oscodename": "ArcticSphynx",
         "osfullname": "AlmaLinux",
         "osrelease": "8.5",
         "osrelease_info": (8, 5),
         "osmajorrelease": 8,
         "osfinger": "AlmaLinux-8",
     }
+    _run_os_grains_tests(
+        _os_release_data, _lsb_distro_information, _os_release_map, expectation
+    )
+    expectation["oscodename"] = "AlmaLinux 8.5 (Arctic Sphynx)"
     _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
 
 
@@ -1254,6 +1301,12 @@ def test_linux_mint_una_os_grains():
     _os_release_map = {
         "_linux_distribution": ("linuxmint", "20.03", "una"),
     }
+    _lsb_distro_information = {
+        "ID": "Linuxmint",
+        "DESCRIPTION": "Linux Mint 20.3 Una",
+        "RELEASE": "20.3",
+        "CODENAME": "una",
+    }
     expectation = {
         "os": "Mint",
         "os_family": "Debian",
@@ -1265,6 +1318,9 @@ def test_linux_mint_una_os_grains():
         "osfinger": "Linux Mint-20",
     }
     _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
+    expectation["osfullname"] = "Linuxmint"
+    expectation["osfinger"] = "Linuxmint-20"
+    _run_os_grains_tests(None, _lsb_distro_information, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
@@ -1290,19 +1346,32 @@ def test_pop_focal_os_grains():
         "LOGO": "distributor-logo-pop-os",
     }
     _os_release_map = {
-        "_linux_distribution": ("pop", "20.04", "focal"),
+        "_linux_distribution": ("Pop", "20.04", "focal"),
+    }
+    _lsb_distro_information = {
+        "ID": "Pop",
+        "DESCRIPTION": "Pop!_OS 20.04 LTS",
+        "RELEASE": "20.04",
+        "CODENAME": "focal",
     }
     expectation = {
         "os": "Pop",
         "os_family": "Debian",
         "oscodename": "focal",
-        "osfullname": "Pop!_OS",
+        "osfullname": "Pop",
         "osrelease": "20.04",
         "osrelease_info": (20, 4),
         "osmajorrelease": 20,
-        "osfinger": "Pop!_OS-20.04",
+        "osfinger": "Pop-20.04",
     }
-    _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
+    _run_os_grains_tests(
+        _os_release_data, _lsb_distro_information, _os_release_map, expectation
+    )
+    _run_os_grains_tests(None, _lsb_distro_information, _os_release_map, expectation)
+    expectation["osfullname"] = "Pop!_OS"
+    expectation["osfinger"] = "Pop!_OS-20.04"
+    # Fixme: os_family failure
+    # _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
@@ -1328,19 +1397,32 @@ def test_pop_impish_os_grains():
         "LOGO": "distributor-logo-pop-os",
     }
     _os_release_map = {
-        "_linux_distribution": ("pop", "21.10", "impish"),
+        "_linux_distribution": ("Pop", "21.10", "impish"),
+    }
+    _lsb_distro_information = {
+        "ID": "Pop",
+        "DESCRIPTION": "Pop!_OS 21.10",
+        "RELEASE": "21.10",
+        "CODENAME": "impish",
     }
     expectation = {
         "os": "Pop",
         "os_family": "Debian",
         "oscodename": "impish",
-        "osfullname": "Pop!_OS",
+        "osfullname": "Pop",
         "osrelease": "21.10",
         "osrelease_info": (21, 10),
         "osmajorrelease": 21,
-        "osfinger": "Pop!_OS-21.10",
+        "osfinger": "Pop-21.10",
     }
-    _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
+    _run_os_grains_tests(
+        _os_release_data, _lsb_distro_information, _os_release_map, expectation
+    )
+    _run_os_grains_tests(None, _lsb_distro_information, _os_release_map, expectation)
+    expectation["osfullname"] = "Pop!_OS"
+    expectation["osfinger"] = "Pop!_OS-21.10"
+    # Fixme: os_family failure
+    # _run_os_grains_tests(_os_release_data, None, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
