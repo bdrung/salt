@@ -1055,6 +1055,19 @@ def test_mendel_os_grains():
     """
     Test if OS grains are parsed correctly in Mendel Linux
     """
+    # From https://coral.ai/software/
+    # downloaded enterprise-eagle-flashcard-20211117215217.zip
+    # -> flashcard_arm64.img -> rootfs.img -> /etc/os-release
+    _os_release_data = {
+        "PRETTY_NAME": "Mendel GNU/Linux 5 (Eagle)",
+        "NAME": "Mendel GNU/Linux",
+        "ID": "mendel",
+        "ID_LIKE": "debian",
+        "HOME_URL": "https://coral.ai/",
+        "SUPPORT_URL": "https://coral.ai/",
+        "BUG_REPORT_URL": "https://coral.ai/",
+        "VERSION_CODENAME": "eagle",
+    }
     _os_release_map = {
         "_linux_distribution": ("Mendel", "10.0", "eagle"),
     }
@@ -1063,13 +1076,13 @@ def test_mendel_os_grains():
         "os": "Mendel",
         "os_family": "Debian",
         "oscodename": "eagle",
-        "osfullname": "Mendel",
+        "osfullname": "Mendel GNU/Linux",
         "osrelease": "10.0",
         "osrelease_info": (10, 0),
         "osmajorrelease": 10,
-        "osfinger": "Mendel-10",
+        "osfinger": "Mendel GNU/Linux-10",
     }
-    _run_os_grains_tests(None, _os_release_map, expectation)
+    _run_os_grains_tests(_os_release_data, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
@@ -1233,20 +1246,37 @@ def test_pop_focal_os_grains():
     """
     Test if OS grains are parsed correctly in Pop!_OS 20.04 "Focal Fossa"
     """
+    # /etc/pop-os/os-release data taken from
+    # pop-default-settings 4.0.6~1642047816~20.04~932caee
+    _os_release_data = {
+        "NAME": "Pop!_OS",
+        "VERSION": "20.04 LTS",
+        "ID": "pop",
+        "ID_LIKE": "ubuntu debian",
+        "PRETTY_NAME": "Pop!_OS 20.04 LTS",
+        "VERSION_ID": "20.04",
+        "HOME_URL": "https://pop.system76.com",
+        "SUPPORT_URL": "https://support.system76.com",
+        "BUG_REPORT_URL": "https://github.com/pop-os/pop/issues",
+        "PRIVACY_POLICY_URL": "https://system76.com/privacy",
+        "VERSION_CODENAME": "focal",
+        "UBUNTU_CODENAME": "focal",
+        "LOGO": "distributor-logo-pop-os",
+    }
     _os_release_map = {
-        "_linux_distribution": ("Pop", "20.04", "focal"),
+        "_linux_distribution": ("pop", "20.04", "focal"),
     }
     expectation = {
         "os": "Pop",
         "os_family": "Debian",
         "oscodename": "focal",
-        "osfullname": "Pop",
+        "osfullname": "Pop!_OS",
         "osrelease": "20.04",
         "osrelease_info": (20, 4),
         "osmajorrelease": 20,
-        "osfinger": "Pop-20.04",
+        "osfinger": "Pop!_OS-20.04",
     }
-    _run_os_grains_tests(None, _os_release_map, expectation)
+    _run_os_grains_tests(_os_release_data, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
@@ -1254,20 +1284,37 @@ def test_pop_impish_os_grains():
     """
     Test if OS grains are parsed correctly in Pop!_OS 21.10 "Impish Indri"
     """
+    # /etc/pop-os/os-release data taken from
+    # pop-default-settings 5.1.0~1640204937~21.10~3f0be51
+    _os_release_data = {
+        "NAME": "Pop!_OS",
+        "VERSION": "21.10",
+        "ID": "pop",
+        "ID_LIKE": "ubuntu debian",
+        "PRETTY_NAME": "Pop!_OS 21.10",
+        "VERSION_ID": "21.10",
+        "HOME_URL": "https://pop.system76.com",
+        "SUPPORT_URL": "https://support.system76.com",
+        "BUG_REPORT_URL": "https://github.com/pop-os/pop/issues",
+        "PRIVACY_POLICY_URL": "https://system76.com/privacy",
+        "VERSION_CODENAME": "impish",
+        "UBUNTU_CODENAME": "impish",
+        "LOGO": "distributor-logo-pop-os",
+    }
     _os_release_map = {
-        "_linux_distribution": ("Pop", "21.10", "impish"),
+        "_linux_distribution": ("pop", "21.10", "impish"),
     }
     expectation = {
         "os": "Pop",
         "os_family": "Debian",
         "oscodename": "impish",
-        "osfullname": "Pop",
+        "osfullname": "Pop!_OS",
         "osrelease": "21.10",
         "osrelease_info": (21, 10),
         "osmajorrelease": 21,
-        "osfinger": "Pop-21.10",
+        "osfinger": "Pop!_OS-21.10",
     }
-    _run_os_grains_tests(None, _os_release_map, expectation)
+    _run_os_grains_tests(_os_release_data, _os_release_map, expectation)
 
 
 @pytest.mark.skip_unless_on_linux
