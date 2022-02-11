@@ -26,3 +26,7 @@ salt-common: script-not-executable [usr/lib/python3/dist-packages/salt/cloud/dep
 salt-common: script-not-executable [usr/lib/python3/dist-packages/salt/cloud/deploy/wget-bootstrap-nocert.sh]
 salt-common: script-not-executable [usr/lib/python3/dist-packages/salt/cloud/deploy/wget-bootstrap.sh]
 salt-common: script-not-executable [usr/lib/python3/dist-packages/salt/templates/debian_ip/route_eth.jinja]
+
+# Silence all known lintian alert (to spot new alert easier)
+salt-common: executable-in-usr-lib usr/lib/python3/dist-packages/salt/templates/git/ssh-id-wrapper
+salt-common: executable-in-usr-lib usr/lib/python3/dist-packages/salt/templates/lxc/salt_tarball

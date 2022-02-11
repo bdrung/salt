@@ -14,3 +14,20 @@ very-long-line-length-in-source-file doc/_themes/saltstack2/static/css/*.css *
 very-long-line-length-in-source-file doc/_themes/saltstack2/static/js/*.min.js *
 very-long-line-length-in-source-file doc/_themes/saltstack2/layout.html *
 very-long-line-length-in-source-file rfcs/*.md *
+
+# Silence all known lintian alert (to spot new alert easier)
+built-using-field-on-arch-all-package (in section for salt-doc) Built-Using ${sphinxdoc:Built-Using} [debian/control:*]
+debian-watch-does-not-check-gpg-signature [debian/watch]
+package-does-not-install-examples tests/integration/files/saltclass/examples/
+very-long-line-length-in-source-file doc/_static/proxy_minions.drawio.xml line 2 is 24421 characters long (>512)
+very-long-line-length-in-source-file doc/_themes/saltstack/static/css/bootstrap-responsive.min.css line 9 is 16608 characters long (>512)
+very-long-line-length-in-source-file doc/_themes/saltstack/static/css/bootstrap.min.css line 9 is 105709 characters long (>512)
+very-long-line-length-in-source-file doc/_themes/saltstack/static/js/vendor/bootstrap.min.js line 6 is 28301 characters long (>512)
+very-long-line-length-in-source-file doc/_themes/saltstack/static/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js line 4 is 14756 characters long (>512)
+very-long-line-length-in-source-file doc/man/salt.7 *
+very-long-line-length-in-source-file doc/topics/cloud/scaleway.rst line 64 is 595 characters long (>512)
+very-long-line-length-in-source-file doc/topics/pillar/index.rst line * is 594 characters long (>512)
+very-long-line-length-in-source-file doc/topics/releases/0.9.3.rst line 280 is 585 characters long (>512)
+very-long-line-length-in-source-file tests/integration/files/mysql_returner_archiver_data.sql line 103 is 4109 characters long (>512)
+very-long-line-length-in-source-file tests/unit/files/playbooks/failed_example.json line 232 is 1761 characters long (>512)
+very-long-line-length-in-source-file tests/unit/files/playbooks/success_example.json line 232 is 1761 characters long (>512)
