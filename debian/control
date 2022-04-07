@@ -72,6 +72,7 @@ Build-Depends: bash-completion,
                python3-zmq (>= 13.1.0),
                sphinx-common,
                virtualenv,
+               yamllint,
                zip
 Build-Depends-Indep: python3-doc, python3-sphinx (>= 1.3.5)
 Standards-Version: 4.6.0
@@ -92,6 +93,7 @@ Depends: iproute2,
          python3-psutil,
          python3-requests (>= 1.0.0),
          python3-yaml,
+         yamllint,
          ${misc:Depends},
          ${python3:Depends}
 Recommends: lsb-release, python3-croniter
