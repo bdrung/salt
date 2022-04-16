@@ -37,7 +37,7 @@ def preserve_rhel_yum_conf():
     os.remove(tmp_file)
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 @requires_system_grains
 def refresh_db(ctx, grains, modules):
     if "refresh" not in ctx:
@@ -73,7 +73,7 @@ def test_pkg(grains):
 
 @pytest.mark.requires_salt_modules("pkg.list_pkgs")
 @pytest.mark.slow_test
-def test_list(modules):
+def test_list(modules, refresh_db):
     """
     verify that packages are installed
     """
@@ -111,7 +111,7 @@ def test_version_cmp(grains, modules):
 @requires_system_grains
 @pytest.mark.slow_test
 @pytest.mark.requires_network
-def test_mod_del_repo(grains, modules):
+def test_mod_del_repo(grains, modules, refresh_db):
     """
     test modifying and deleting a software repository
     """
@@ -160,7 +160,7 @@ def test_mod_del_repo(grains, modules):
 
 
 @pytest.mark.slow_test
-def test_mod_del_repo_multiline_values(modules):
+def test_mod_del_repo_multiline_values(modules, refresh_db):
     """
     test modifying and deleting a software repository defined with multiline values
     """
@@ -236,7 +236,7 @@ def test_which(modules):
 @pytest.mark.requires_salt_modules("pkg.version", "pkg.install", "pkg.remove")
 @pytest.mark.slow_test
 @pytest.mark.requires_network
-def test_install_remove(modules, test_pkg):
+def test_install_remove(modules, test_pkg, refresh_db):
     """
     successfully install and uninstall a package
     """
@@ -278,7 +278,7 @@ def test_install_remove(modules, test_pkg):
 @pytest.mark.slow_test
 @pytest.mark.requires_network
 @pytest.mark.requires_salt_states("pkg.installed")
-def test_hold_unhold(grains, modules, states, test_pkg):
+def test_hold_unhold(grains, modules, states, test_pkg, refresh_db):
     """
     test holding and unholding a package
     """
@@ -325,7 +325,7 @@ def test_hold_unhold(grains, modules, states, test_pkg):
 @requires_system_grains
 @pytest.mark.slow_test
 @pytest.mark.requires_network
-def test_refresh_db(grains, modules, tmp_path, minion_opts):
+def test_refresh_db(grains, modules, tmp_path, minion_opts, refresh_db):
     """
     test refreshing the package database
     """
@@ -352,7 +352,7 @@ def test_refresh_db(grains, modules, tmp_path, minion_opts):
 @pytest.mark.requires_salt_modules("pkg.info_installed")
 @requires_system_grains
 @pytest.mark.slow_test
-def test_pkg_info(grains, modules, test_pkg):
+def test_pkg_info(grains, modules, test_pkg, refresh_db):
     """
     Test returning useful information on Ubuntu systems.
     """
@@ -389,7 +389,7 @@ def test_pkg_info(grains, modules, test_pkg):
 @requires_system_grains
 @pytest.mark.slow_test
 @pytest.mark.requires_network
-def test_pkg_upgrade_has_pending_upgrades(grains, modules, test_pkg):
+def test_pkg_upgrade_has_pending_upgrades(grains, modules, test_pkg, refresh_db):
     """
     Test running a system upgrade when there are packages that need upgrading
     """
@@ -469,7 +469,7 @@ def test_pkg_upgrade_has_pending_upgrades(grains, modules, test_pkg):
 @requires_system_grains
 @pytest.mark.slow_test
 @pytest.mark.requires_salt_states("pkg.removed")
-def test_pkg_latest_version(grains, modules, states, test_pkg):
+def test_pkg_latest_version(grains, modules, states, test_pkg, refresh_db):
     """
     Check that pkg.latest_version returns the latest version of the uninstalled package.
     The package is not installed. Only the package version is checked.
